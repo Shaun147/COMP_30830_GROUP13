@@ -1,4 +1,23 @@
 body {
     margin: 0;
     font-family: 'Courier New', Courier, monospace;
+    text-align: center;
+    font-size: 14px;
+    color: #2d3338;
+}
+
+
+#heading-banner {
+    display: flex;
+    font-size: 20px;
+    text-transform: uppercase;
+    background-color: rgba(198, 229, 255, 0.349);
+}
+
+
+#heading-banner h1 {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

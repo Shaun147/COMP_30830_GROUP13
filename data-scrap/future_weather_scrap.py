@@ -5,13 +5,15 @@ import time
 from datetime import datetime
 import json
 
-weather_apiKey = "3520d30989c43e2dd17f8369bcc0a282"
+weather_apiKey = "e7138528cfa0e09e1ad22a15e2e2532a"
 lat = 53.3498
 lon = 6.2603
 part = "current,daily,minutely"
 parameters = {"lat": lat, "lon": lon, "exclude": part, "appid" : weather_apiKey} 
 weather_URL = "https://openweathermap.org/city/2964574"
 
+
+# Initialise new table of future weather in databese dbbike13
 def create_table():
     sql = """
     CREATE TABLE IF NOT EXISTS future_weather(
@@ -33,11 +35,13 @@ def create_table():
     );
     """   
     try:
-        res = cursor.execute(sql)
+        cursor.execute(sql)
         print('create ok')
     except Exception as e:
         print(e)
 
+
+# Add details of table of weather
 def write_to_db(text):
     future_weather_data = json.loads(text)
     for future_hour in range(len(future_weather_data['hourly'])):
@@ -59,7 +63,7 @@ def write_to_db(text):
             str(future_weather_data['hourly'][future_hour]['wind_speed'])
             )
         
-        sql = """INSERT INTO dbbikes1.future_weather (clouds,dew_point,dt,feels_like,humidity,
+        sql = """INSERT INTO dbbike13.future_weather (clouds,dew_point,dt,feels_like,humidity,
         pop,pressure,temp,uvi,visibility,weather_description,weather_main,wind_deg,wind_gust,wind_speed) 
         VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')""" % weather_vals
     
@@ -71,26 +75,26 @@ def write_to_db(text):
             db.rollback()
             print("insert wrong")
     db.close()
+    
 
 while True:
     try:
         db = pymysql.connect(
-            host="dbbikes1.citjnbrbkplf.us-east-1.rds.amazonaws.com",
-            user="admin",
-            password="12345678",
+            host="dublinbikegroup13.c1msfserw61n.us-east-1.rds.amazonaws.com",
+            user="group13",
+            password="123456789",
             port=3306,
-            database="dbbikes1")
-        cursor = db.cursor()  
-
+            database="dbbike13")
+        cursor = db.cursor()
         create_table()
 
         now = datetime.now()
-        r = requests.get(weather_URL, params = parameters)
-        print(r,now)
-            
+        r = requests.get(weather_URL, params=parameters)
+        print(r, now)
+
         write_to_db(r.text)
-            
-        time.sleep(48*60*60)
-        
+
+        time.sleep(5 * 60)
+
     except:
-        print(traceback.format_exc())   
+        print(traceback.format_exc())
