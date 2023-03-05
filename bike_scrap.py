@@ -22,6 +22,7 @@ user=USER,
 password=PASSWORD,
 port=PORT,
 database=DATABASE)
+cur = db.cursor()
 
 
 def initialise_table():
@@ -119,13 +120,30 @@ def write_to_db_availability():
             `available_bike_stands`, `available_bikes`, `status`) VALUES 
             ("%s","%s","%s","%s","%s")""" % availability
             print(sql)
-            db.cursor().execute(sql)
-            db.commit()
-            print("insert ok")
+            if is_exist_avail(availability):
+                cur.execute(sql)
+                db.commit()
+                print("insert ok")
     except:
         db.rollback()
         print("insert wrong")
     db.close()
+
+def is_exist_avail(list):
+    list = (list[0], list[1])
+    sql = """
+    SELECT * FROM dbbike13.availability
+        WHERE number = "%s"
+        and last_update = "%s"
+    """ % list
+    cur.execute(sql)
+    rs = cur.fetchall()
+    if rs == ():
+        return True
+    print("is exist")
+    return False
+
+
 
 # write_to_db_station()
 while True:

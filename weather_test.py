@@ -2,6 +2,7 @@ import pymysql
 import traceback
 import requests
 import time
+import datetime as dt
 from datetime import datetime
 import json
 
@@ -33,17 +34,17 @@ def create_table():
         dt VARCHAR(255) PRIMARY KEY
     );
     """
-
     try:
-        cursor.execute(sql)
+        cur.execute(sql)
         print('create ok')
     except Exception as e:
         print(e)
 
 
-def write_to_db(text):
+def write_to_db_weather(text):
     weather_data = json.loads(text)
     weather_vals = (
+        str(dt.datetime.fromtimestamp(weather_data['dt'])),
         str(weather_data['clouds']['all']),
         str(weather_data['main']['feels_like']),
         str(weather_data['main']['humidity']),
@@ -51,32 +52,28 @@ def write_to_db(text):
         str(weather_data['main']['temp']),
         str(weather_data['main']['temp_max']),
         str(weather_data['main']['temp_min']),
-        str(datetime.fromtimestamp(weather_data['sys']['sunrise'])),
-        str(datetime.fromtimestamp(weather_data['sys']['sunset'])),
+        str(dt.datetime.fromtimestamp(weather_data['sys']['sunrise'])),
+        str(dt.datetime.fromtimestamp(weather_data['sys']['sunset'])),
         str(weather_data['visibility']),
         str(weather_data['weather'][0]['description']),
         str(weather_data['weather'][0]['main']),
         str(weather_data['wind']['deg']),
-        str(weather_data['wind']['speed']),
-        str(datetime.fromtimestamp(weather_data['dt']))
+        str(weather_data['wind']['speed'])
     )
-
     sql = """
-    INSERT INTO `test`.`weather_Dublin` (`Clouds`, `feels_like`, `humidity`, 
-    `pressure`, `temp`, `temp_max`, `temp_min`, `sunrise`, `sunset`, `visibility`, 
-    `weather_description`, `weather_main`, `wind_deg`, `wind_speed`, `dt`) VALUES 
-    ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')
-    """ % weather_vals
-
+        INSERT INTO `dbbike13`.`weather_Dublin` (`Clouds`, `feels_like`, `humidity`, 
+        `pressure`, `temp`, `temp_max`, `temp_min`, `sunrise`, `sunset`, `visibility`, 
+        `weather_description`, `weather_main`, `wind_deg`, `wind_speed`, `dt`) VALUES 
+        ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')
+        """ % weather_vals
+    print(sql)
     try:
-        cursor.execute(sql)
+        cur.execute(sql)
         db.commit()
-        print("insert ok")
+        print("weather insert ok")
     except:
         db.rollback()
-        print("insert wrong")
-
-    db.close()
+        print("weather insert wrong")
 
 
 while True:
@@ -87,14 +84,14 @@ while True:
             password="123456789",
             port=3306,
             database="dbbike13")
-        cursor = db.cursor()
-        create_table()
+        cur = db.cursor()
+        # create_table()
 
-        now = datetime.now()
+        now = dt.datetime.now()
         r = requests.get(weather_URL, params=parameters)
         print(r, now)
 
-        write_to_db(r.text)
+        write_to_db_weather(r.text)
 
         time.sleep(5 * 60)
 
