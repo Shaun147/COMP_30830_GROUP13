@@ -206,4 +206,4 @@ while True:
     write_to_db_weather(RESOURCE_WEATHER.text)
     write_to_db_availability()
 
-    time.sleep(10)
+    time.sleep(5 * 60)
