@@ -14,15 +14,13 @@ HOST = "dublinbikegroup13.c1msfserw61n.us-east-1.rds.amazonaws.com"
 PORT = 3306
 DATABASE = "dbbike13"
 
-RESOURCE = requests.get("https://api.jcdecaux.com/vls/v1/stations?contract=Dublin&apiKey=%s"%APIKEY)
-
 weather_apiKey = "e7138528cfa0e09e1ad22a15e2e2532a"
 city_name = 'Dublin,ie'
 
 parameters = {"q": city_name, "appid": weather_apiKey}
 weather_URL = "http://api.openweathermap.org/data/2.5/weather"
 
-RESOURCE_WEATHER = requests.get(weather_URL, params=parameters)
+
 
 db = pymysql.connect(
 host=HOST,
@@ -202,6 +200,8 @@ def is_exist_weather(time):
 
 # write_to_db_station()
 while True:
+    RESOURCE = requests.get("https://api.jcdecaux.com/vls/v1/stations?contract=Dublin&apiKey=%s" % APIKEY)
+    RESOURCE_WEATHER = requests.get(weather_URL, params=parameters)
 
     write_to_db_weather(RESOURCE_WEATHER.text)
     write_to_db_availability()
