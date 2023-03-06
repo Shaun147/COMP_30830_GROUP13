@@ -9,21 +9,17 @@
   </head>
 
   <body>
-    <header class="header">
-      <h1>Dublin Bikes</h1>
-    </header>
-
     <div class="container">
-      <div class="left-column">
-        <h1>Dublin Bike Station Map</h1>
-          <div id="map"></div>
 
-          <h2 class="weather-heading">Current Weather in Dublin</h2>
-          <div class="weather-container">
+      <div class="left-column">
+        <h1 id="map-header">Dublin Bike Station Map</h1>
+          <div id="map"></div>
+          <h2 id="weather-heading">Current Weather in Dublin</h2>
+          <div id="weather-container">
               <img src="https://www.met.ie/images/icons/weather-symbols/cloudy.svg" alt="Weather icon">
-              <div class="weather-info">
-                  <p class="temperature">12°C</p>
-                  <p class="description">Mostly cloudy</p>
+              <div id="weather-info">
+                  <p id="temperature">12°C</p>
+                  <p id="description">Mostly cloudy</p>
               </div>
           </div>
       </div>
@@ -35,20 +31,30 @@
                 <option value="">-- Please Select --</option>
             </select>
         </div>
-
-    <h2>Bike Station Availability</h2>
-      <table>
-      <thead>
-        <tr>
+        <h2>Bike Station Availability</h2>
+            <table>
+              <thead>
+              <tr>
                   <th>Number</th>
                   <th>Available Stands</th>
                   <th>Available Bikes</th>
                   <th>Status</th>
                   <th>Last update</th>
-        </tr>
-      </thead>
+              </tr>
+              </thead>
+	          </table>
+      </div>
+      
+    </div>
 
-	    </table>
+    <script>
+        stationDropDown();
+        displayWeather();
+    </script>
+
+      <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDoxMoc5jrCrg7c7noB88amyEFVFB-1o10&callback=initMap&libraries=&v=weekly"
+    async></script>
 
     <header>
       <h1>{% block heading %}{% endblock %}</h1>
