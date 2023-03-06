@@ -7,4 +7,4 @@ class Config:
     DB_PORT = 3306
     DB_NAME = "dbbike13"
     
-    SECRET_KEY = os.environ.get("SECRET_KEY") or "my_secret_key"
+    # SECRET_KEY = os.environ.get("SECRET_KEY") or "my_secret_key"
