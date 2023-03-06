@@ -1,20 +1,66 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %} - My Flask App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+    
+  </head>
 
-{% block title %}Home{% endblock %}
+  <body>
+    <header class="header">
+      <h1>Dublin Bikes</h1>
+    </header>
 
-{% block heading %}Dublin Bike{% endblock %}
+    <div class="container">
+      <div class="left-column">
+        <h1>Dublin Bike Station Map</h1>
+          <div id="map"></div>
 
-{% block content %}
-  <h2>Latest News</h2>
-  <ul>
-    <li><a href="#">New feature added to the app</a></li>
-    <li><a href="#">App wins award at conference</a></li>
-  </ul>
-{% endblock %}
+          <h2 class="weather-heading">Current Weather in Dublin</h2>
+          <div class="weather-container">
+              <img src="https://www.met.ie/images/icons/weather-symbols/cloudy.svg" alt="Weather icon">
+              <div class="weather-info">
+                  <p class="temperature">12°C</p>
+                  <p class="description">Mostly cloudy</p>
+              </div>
+          </div>
+      </div>
 
-  
+      <div class="right-column">
+        <div class="bike-station-select">
+            <label for="station-select">Select a bike station:</label>
+            <select id="station-select">
+                <option value="">-- Please Select --</option>
+            </select>
+        </div>
 
+    <h2>Bike Station Availability</h2>
+      <table>
+      <thead>
+        <tr>
+                  <th>Number</th>
+                  <th>Available Stands</th>
+                  <th>Available Bikes</th>
+                  <th>Status</th>
+                  <th>Last update</th>
+        </tr>
+      </thead>
 
- 
+	    </table>
+
+    <header>
+      <h1>{% block heading %}{% endblock %}</h1>
+    </header>
+
+    <main>
+      {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+    </footer>
+  </body>
+</html>
 
 

@@ -87,7 +87,7 @@ def get_stations():
 # Add specific columns and values to availability table
 def get_availability():
     availList=[]
-    stations=json.loads(r.text)
+    stations=json.loads(RESOURCE.text)
     for station in stations:
         vals_availability=(
         station.get('number'),
