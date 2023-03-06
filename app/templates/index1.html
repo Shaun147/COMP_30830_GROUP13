@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %} - My Flask App</title>
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="{{ url_for('static', filename='app.js') }}"></script>
+
+  </head>
+
+  <body>
+    <header class="header" id="heading-banner">
+      <h1>Dublin Bikes</h1>
+    </header>
+
+    <div class="container">
+      <div class="left-column">
+        <h1>Dublin Bike Station Map</h1>
+          <div id="map"></div>
+
+          <h2 class="weather-heading">Current Weather in Dublin</h2>
+          <div class="weather-container">
+              <img src="https://www.met.ie/images/icons/weather-symbols/cloudy.svg" alt="Weather icon">
+              <div class="weather-info">
+                  <p class="temperature">12°C</p>
+                  <p class="description">Mostly cloudy</p>
+              </div>
+          </div>
+      </div>
+
+      <div class="right-column">
+        <div class="bike-station-select">
+            <label for="station-select">Select a bike station:</label>
+            <select id="station-select">
+                <option value="">-- Please Select --</option>
+            </select>
+        </div>
+
+        <h2>Bike Station Availability</h2>
+            <table>
+      <thead>
+        <tr>
+                  <th>Number</th>
+                  <th>Available Stands</th>
+                  <th>Available Bikes</th>
+                  <th>Status</th>
+                  <th>Last update</th>
+        </tr>
+      </thead>
+	    </table>
+      </div>
+    </div>
+
+    <script>
+        stationDropDown();
+        displayWeather();
+    </script>
+
+      <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDoxMoc5jrCrg7c7noB88amyEFVFB-1o10&callback=initMap&libraries=&v=weekly"
+    async></script>
+
+
+  </body>
+</html>
