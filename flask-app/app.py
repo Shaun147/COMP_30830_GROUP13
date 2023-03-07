@@ -2,8 +2,9 @@ from datetime import datetime
 from flask import Flask, jsonify, render_template, request, url_for,g
 from sqlalchemy import create_engine
 from flask_mysqldb import MySQL
-import pymysql
 import pandas as pd
+import traceback
+import functools
 import requests
 import os
 
@@ -13,7 +14,7 @@ app.config.from_object("config.Config")
 
 def connect_to_database():
     engine = create_engine(
-        f"mysql://{app.config['DB_USERNAME']}:{app.config['DB_PASSWORD']}@{app.config['DB_HOST']}:{app.config['DB_PORT']}/{app.config['DB_NAME']}",
+        f"mysql://{app.config['USER']}:{app.config['PASSWORD']}@{app.config['HOST']}:{app.config['PORT']}/{app.config['DATABASE']}",
         echo=True
     )
     return engine
@@ -39,37 +40,49 @@ def hello():
 
 
 @app.route("/stations")
-def stations(): 
-    conn = get_db().connect()
-    
-    sql = "SELECT s.number,s.bike_stands, s.name, s.address, s.position_lat, s.position_lng, a.available_bike_stands, a.available_bikes, " \
-          "a.status, MAX(a.last_update) AS `current_availability` " \
-          "FROM dbbikes1.availability as a " \
-          "INNER JOIN dbbikes1.station as s ON s.number = a.number " \
-          "GROUP BY s.number " \
-          "ORDER BY s.number;"
+@functools.lru_cache(maxsize=128)
+def get_stations():
+    engine = get_db()
+        
+    sql = "SELECT s.number, s.bike_stands, s.name, s.address, s.position_lat, s.position_lng, a.available_bike_stands, a.available_bikes, " \
+        "a.status, MAX(a.last_update) AS `current_availability` " \
+        "FROM availability AS a " \
+        "INNER JOIN station AS s ON s.number = a.number " \
+        "GROUP BY s.number " \
+        "ORDER BY s.number;"
+          
+    try:
+        with engine.connect() as conn:
+            rows = conn.execute(sql).fetchall()
+            print(f"#found {len(rows)} stations", rows)
+            return jsonify([dict(row) for row in rows])
+    except Exception as e:
+        print(traceback.format_exc())
+        return f"error in get_stations: {e}", 404
 
-    df = pd.read_sql(sql, get_db())
-    print(df)
 
-    return df.to_json(orient="records")
 
 
 @app.route("/static_stations")
 def static_stations():
-    conn = get_db().connect()
+    engine = get_db()
 
     sql = "SELECT * FROM dbbikes1.station " \
           "ORDER BY name;"
 
-    df = pd.read_sql(sql, get_db())
-
-    return df.to_json(orient="records")
+    try:
+        with engine.connect() as conn:
+            rows = conn.execute(sql).fetchall()
+            print(f"#found {len(rows)} stations", rows)
+            return jsonify([dict(row) for row in rows])
+    except Exception as e:
+        print(traceback.format_exc())
+        return f"error in get_stations: {e}", 404
 
 
 @app.route('/occupancy/<int:station_id>')
 def get_occupancy(station_id):
-    conn = get_db().connect() 
+    engine = get_db()
 
     sql = f"""SELECT s.name, avg(a.available_bike_stands) as Avg_bike_stands,
         avg(a.available_bikes) as Avg_bikes_free, DAYNAME(a.last_update) as DayName
@@ -80,42 +93,19 @@ def get_occupancy(station_id):
         GROUP BY s.name , DayName 
         ORDER BY s.name , DayName;"""
 
-    df = pd.read_sql(sql, get_db())
-
-    return df.to_json(orient="records")
-
-
-@app.route('/hourly/<int:station_id>')
-def get_hourly_data(station_id):
-    conn = get_db().connect() 
-
-    sql = f"""SELECT s.name,count(a.number),avg(available_bike_stands) as Avg_bike_stands,
-        avg(available_bikes) as Avg_bikes_free,EXTRACT(HOUR FROM last_update) as Hourly
-        FROM dbbikes1.availability as a
-        JOIN dbbikes1.station as s
-        ON s.number = a.number
-        WHERE a.number = {station_id}
-        GROUP BY EXTRACT(HOUR FROM last_update) 
-        ORDER BY EXTRACT(HOUR FROM last_update) asc"""
-
-    df = pd.read_sql(sql, get_db())
-
-    return df.to_json(orient="records")
+    try:
+        with engine.connect() as conn:
+            rows = conn.execute(sql).fetchall()
+            print(f"#found {len(rows)} stations", rows)
+            return jsonify([dict(row) for row in rows])
+    except Exception as e:
+        print(traceback.format_exc())
+        return f"error in get_stations: {e}", 404
 
 
-@app.route("/weather_forecast")
-def weather_forecast():
-    conn = get_db().connect()
-    print("************************")
 
-    sql = f"""SELECT weather_description, weather_main, humidity, wind_speed,visibility,sunrise,sunset,pressure 
-    FROM dbbikes1.weather_Dublin
-    ORDER BY dt DESC
-    LIMIT 1;"""
 
-    df = pd.read_sql(sql, get_db())
 
-    return df.to_json(orient="records")
 
 if __name__ == '__main__':
     app.run(debug=True)

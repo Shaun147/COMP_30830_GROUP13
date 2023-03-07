@@ -1,10 +1,12 @@
 import os
 
 class Config:
-    DB_USERNAME = "group13"
-    DB_PASSWORD = "123456789"
-    DB_HOST = "dublinbikegroup13.c1msfserw61n.us-east-1.rds.amazonaws.com"
-    DB_PORT = 3306
-    DB_NAME = "dbbike13"
+    NAME = "Dublin"
+    STATIONS = "https://api.jcdecaux.com/vls/v1/stations"
+    USER = "group13"
+    PASSWORD = "123456789"
+    HOST = "dublinbikegroup13.c1msfserw61n.us-east-1.rds.amazonaws.com"
+    PORT = 3306
+    DATABASE = "dbbike13"
     
-    # SECRET_KEY = os.environ.get("SECRET_KEY") or "my_secret_key"
+    SECRET_KEY = os.environ.get("8baeb25cfb9a5eb1f76dec99338e19bcd20e4386")

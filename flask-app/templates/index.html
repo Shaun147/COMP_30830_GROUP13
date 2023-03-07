@@ -2,10 +2,10 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>{% block title %}{% endblock %} - My Flask App</title>
+    <title>{% block title %}{% endblock %}Dublin Bikes</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <script src="{{ url_for('static', filename='app.js') }}"></script>
-    
+    <script type="module" src="{{ url_for('static', filename='js/index.js') }}"></script>
+  
   </head>
 
   <body>
@@ -38,6 +38,7 @@
           </div>
       </div>
 
+
       <div class="right-column">
         <div class="bike-station-select">
             <label for="station-select">Select a bike station:</label>
@@ -65,18 +66,9 @@
         stationDropDown();
         displayWeather();
     </script>
-
-      <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDoxMoc5jrCrg7c7noB88amyEFVFB-1o10&callback=initMap&libraries=&v=weekly"
-    async></script>
-
-    <header>
-      <h1>{% block heading %}{% endblock %}</h1>
-    </header>
-
-    <main>
-      {% block content %}{% endblock %}
-    </main>
+    <script src="https://maps.googleapis.com/maps/api/js?
+    key=AIzaSyBcfizGN4iUUhAxTviaQD7p_QYLkQE7cCs&callback=initMap"
+    async defer></script>
 
     <footer>
     </footer>
