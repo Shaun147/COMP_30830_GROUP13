@@ -33,8 +33,8 @@ def stations():
     GROUP BY s.number
     ORDER BY s.number
     """
-    df = pd.read_sql(sql, engine)
-    return df.to_json(orient="records")
+    rs = pd.read_sql(sql, engine)
+    return rs.to_json(orient="records")
 
 @app.route("/static_stations")
 def static_stations():
@@ -42,8 +42,8 @@ def static_stations():
     SELECT * FROM dbbike13.station
     ORDER BY name;
     """
-    df = pd.read_sql(sql, engine)
-    return df.to_json(orient="records")
+    rs = pd.read_sql(sql, engine)
+    return rs.to_json(orient="records")
 
 @app.route('/occupancy/<int:station_id>')
 def get_occupancy(station_id):
@@ -56,9 +56,9 @@ def get_occupancy(station_id):
     WHERE s.number = %s
     GROUP BY s.name , DayName
     ORDER BY s.name , DayName;"""%station_id
-    df = pd.read_sql(sql, engine)
+    rs = pd.read_sql(sql, engine)
 
-    return df.to_json(orient="records")
+    return rs.to_json(orient="records")
 
 @app.route("/weather")
 def weather():
@@ -66,13 +66,13 @@ def weather():
     FROM dbbike13.weather_Dublin
     ORDER BY dt DESC
     LIMIT 1;"""
-    df = pd.read_sql(sql, engine)
-    print(df.to_json(orient="records"))
-    return df.to_json(orient="records")
+    rs = pd.read_sql(sql, engine)
+    print(rs.to_json(orient="records"))
+    return rs.to_json(orient="records")
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(host='0.0.0.0', port=8000)
     # stations()
 
 

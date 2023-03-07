@@ -85,6 +85,10 @@ function display_weather() {
     }).then(data => {
         var weather_output = data[0].weather_description;
         document.getElementById("weather-description").innerHTML = weather_output;
+        var time = new Data();
+        var time_string = time.toLocalString();
+        var time_
+
     })
 
 }

@@ -6,6 +6,7 @@
     <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet" type="text/css">
     <script type="text/javascript" src="{{ url_for('static', filename='app.js') }}"></script>
 
+
   </head>
 
   <body>
@@ -24,6 +25,7 @@
               <div id="weather-info">
                   <p id="temperature">12°C</p>
                   <p id="weather-description"></p>
+                  <p id="time-detail"></p>
               </div>
           </div>
       </div>
@@ -43,10 +45,11 @@
         display_weather();
         station_dropdown();
     </script>
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBqLJ1VO0sxQFYsdj4R0_5ArcCNBQdjJI&callback=initMap&libraries=&v=weekly"
+        async></script>
 
-      <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDoxMoc5jrCrg7c7noB88amyEFVFB-1o10&callback=initMap&libraries=&v=weekly"
-    async></script>
+
 
 
   </body>
