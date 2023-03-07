@@ -10,25 +10,26 @@
 
   <body>
     <header class="header" id="heading-banner">
-      <h2>Dublin Bikes</h2>
+      <h1>Dublin Bikes</h1>
     </header>
 
     <div class="container">
       <div class="left-column">
-        <h1 id="map_header">Dublin Bike Station Map</h1>
+        <h1>Dublin Bike Station Map</h1>
           <div id="map"></div>
 
-          <h2 class="weather-heading">Current Weather in Dublin</h2>
-          <div class="weather-container">
+          <h2 id="weather-heading">Current Weather in Dublin</h2>
+          <div id="weather-container">
               <img src="https://www.met.ie/images/icons/weather-symbols/cloudy.svg" alt="Weather icon">
-              <div class="weather-info">
-                  <p class="temperature">12°C</p>
-                  <p class="description">Mostly cloudy</p>
+              <div id="weather-info">
+                  <p id="temperature">12°C</p>
+                  <p id="weather-description">Mostly cloudy</p>
               </div>
           </div>
       </div>
+
       <div class="right-column">
-        <div class="bike-station-select">
+        <div id="bike-station-select">
             <label for="station-select">Select a bike station:</label>
             <select id="station-select">
                 <option value="">-- Please Select --</option>

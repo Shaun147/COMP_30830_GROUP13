@@ -172,8 +172,8 @@ def is_exist_avail(list):
     list = (list[0], list[1])
     sql = """
     SELECT * FROM dbbike13.availability
-        WHERE number = "%s"
-        and last_update = "%s"
+    WHERE number = "%s"
+    and last_update = "%s"
     """ % list
     cur.execute(sql)
     rs = cur.fetchall()
@@ -185,7 +185,7 @@ def is_exist_avail(list):
 def is_exist_weather(time):
     sql = """
         SELECT * FROM dbbike13.weather_Dublin
-            WHERE dt = "%s"
+        WHERE dt = "%s"
         """ % time
     cur.execute(sql)
     rs = cur.fetchall()

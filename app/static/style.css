@@ -42,12 +42,12 @@ body {
 
 }
 
-.weather-heading {
+#weather-heading {
     font-size: 20px;
     margin-top: 0;
 }
 
-.weather-container {
+#weather-container {
     display: flex;
     align-items: center;
     background-color: #e6e6e6;
@@ -56,27 +56,27 @@ body {
     margin-bottom: 20px;
 }
 
-.weather-container img {
+#weather-container img {
     height: 60px;
     margin-right: 10px;
 }
 
-.temperature {
+#temperature {
     font-size: 30px;
     font-weight: bold;
     margin: 0;
 }
 
-.description {
+#description {
     margin: 0;
 }
 
-/* Right Column */
+
 .right-column {
     flex: 1;
 }
 
-.bike-station-select {
+#bike-station-select {
     margin-bottom: 20px;
 }
 
