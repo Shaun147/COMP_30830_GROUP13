@@ -31,44 +31,6 @@ database=DATABASE)
 cur = db.cursor()
 
 
-def initialise_table():
-    sql = """
-      CREATE TABLE IF NOT EXISTS station(
-        number INTEGER PRIMARY KEY,
-        name VARCHAR(128),
-        address VARCHAR(128),
-        position_lat DOUBLE,
-        position_lng DOUBLE,
-        bike_stands INTEGER,
-        banking INTEGER,
-        bonus INTEGER,
-        contract_name VARCHAR(128)
-    )
-    """
-    try:
-        db.cursor().execute(sql)
-    except Exception as e:
-        print(e)
-
-    sql = """
-    CREATE TABLE IF NOT EXISTS availability(
-        number INTEGER ,
-        last_update DateTime ,
-        available_bike_stands INTEGER,
-        available_bikes INTEGER,
-        status VARCHAR(128),
-        primary key (number,last_update ) 
-    )
-    """
-    try:
-        db.cursor().execute(sql)
-        print("table station and availability created")
-    except Exception as e:
-        print(e)
-
-
-
-# initialise_table()
 def get_stations():
     station_list=[]
     stations=json.loads(RESOURCE.text)
@@ -150,20 +112,20 @@ def write_to_db_weather(text):
         str(weather_data['weather'][0]['description']),
         str(weather_data['weather'][0]['main']),
         str(weather_data['wind']['deg']),
-        str(weather_data['wind']['speed'])
+        str(weather_data['wind']['speed']),
+        str(weather_data['weather'][0]['icon'])
     )
-    sql = """
-        INSERT INTO `dbbike13`.`weather_Dublin` (`dt`, `Clouds`, `feels_like`, `humidity`, 
+    sql = """    
+        INSERT INTO `dbbike13`.`weather` (`dt`, `Clouds`, `feels_like`, `humidity`, 
         `pressure`, `temp`, `temp_max`, `temp_min`, `sunrise`, `sunset`, `visibility`, 
-        `weather_description`, `weather_main`, `wind_deg`, `wind_speed`) VALUES 
-        ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')
+        `weather_description`, `weather_main`, `wind_deg`, `wind_speed`, `icon`) VALUES 
+        ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')
         """ % weather_vals
     print(sql)
     try:
-        if is_exist_weather(weather_vals[0]):
-            cur.execute(sql)
-            db.commit()
-            print("weather insert ok")
+        cur.execute(sql)
+        db.commit()
+        print("weather insert ok")
     except:
         db.rollback()
         print("weather insert wrong")

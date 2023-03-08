@@ -78,16 +78,32 @@ function display_station_info(value){
     })
 }
 
+function now_time(){
+        var time = new Date();
+        var year = time.getFullYear();
+        var month = time.getMonth()+1;
+        var day = time.getDay();
+        var hour = time.getHours();
+        var minutes = time.getMinutes();
+        var seconds = time.getSeconds();
+        var rs = "time"+year+month+day+hour+minutes+seconds;
+        return rs;
+}
+
 function display_weather() {
 
     fetch("/weather").then(response => {
         return response.json();
     }).then(data => {
+
         var weather_output = data[0].weather_description;
         document.getElementById("weather-description").innerHTML = weather_output;
-        var time = new Data();
-        var time_string = time.toLocalString();
-        var time_
+
+
+        var time_string = now_time();
+        document.getElementById("time-detail").innerHTML = time_string;
+
+        var
 
     })
 
