@@ -6,6 +6,7 @@
     <link href="test.css" rel="stylesheet" type="text/css">
 <!--    <script type="text/javascript" src="{{ url_for('static', filename='app.js') }}"></script>-->
 
+
   </head>
 
   <body>
@@ -20,10 +21,11 @@
 
           <h2 id="weather-heading">Current Weather in Dublin</h2>
           <div id="weather-container">
-              <img src="https://www.met.ie/images/icons/weather-symbols/cloudy.svg" alt="Weather icon">
+              <img id="weather-icon" src="https://www.met.ie/images/icons/weather-symbols/cloudy.png" alt="Weather icon">
               <div id="weather-info">
                   <p id="temperature">12°C</p>
-                  <p id="weather-description">Mostly cloudy</p>
+                  <p id="weather-description">sdfsdafsdaf</p>
+                  <p id="time-detail">fghfghfdh</p>
               </div>
           </div>
       </div>
@@ -31,34 +33,22 @@
       <div class="right-column">
         <div id="bike-station-select">
             <label for="station-select">Select a bike station:</label>
-            <select id="station-select">
-                <option value="">-- Please Select --</option>
-            </select>
+            <select id="station-select" onchange="display_station_info(this.value)"></select>
         </div>
 
         <h2>Bike Station Availability</h2>
-            <table>
-      <thead>
-        <tr>
-                  <th>Number</th>
-                  <th>Available Stands</th>
-                  <th>Available Bikes</th>
-                  <th>Status</th>
-                  <th>Last update</th>
-        </tr>
-      </thead>
-	    </table>
+            <table id="station-table"></table>
       </div>
     </div>
 
     <script>
-        stationDropDown();
-        displayWeather();
+        display_weather();
+        station_dropdown();
     </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBcfizGN4iUUhAxTviaQD7p_QYLkQE7cCs&c
+    allback=initMap&libraries=&v=weekly"async></script>
 
-      <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDoxMoc5jrCrg7c7noB88amyEFVFB-1o10&callback=initMap&libraries=&v=weekly"
-    async></script>
+
 
 
   </body>

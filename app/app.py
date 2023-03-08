@@ -13,6 +13,7 @@ HOST = "dublinbikegroup13.c1msfserw61n.us-east-1.rds.amazonaws.com"
 PORT = 3306
 DATABASE = "dbbike13"
 
+
 engine = create_engine("mysql+pymysql://{}:{}@{}:{}/{}".format(USER, PASSWORD, HOST, PORT, DATABASE), echo=True)
 
 @app.route("/")
@@ -34,6 +35,7 @@ def stations():
     ORDER BY s.number
     """
     rs = pd.read_sql(sql, engine)
+    print(rs)
     return rs.to_json(orient="records")
 
 @app.route("/static_stations")
@@ -43,21 +45,6 @@ def static_stations():
     ORDER BY name;
     """
     rs = pd.read_sql(sql, engine)
-    return rs.to_json(orient="records")
-
-@app.route('/occupancy/<int:station_id>')
-def get_occupancy(station_id):
-    sql = """
-    SELECT s.name, avg(a.available_bike_stands) as Avg_bike_stands,
-    avg(a.available_bikes) as Avg_bikes_free, DAYNAME(a.last_update) as DayName
-    FROM dbbike13.availability as a
-    JOIN dbbike13.station as s
-    ON s.number = a.number
-    WHERE s.number = %s
-    GROUP BY s.name , DayName
-    ORDER BY s.name , DayName;"""%station_id
-    rs = pd.read_sql(sql, engine)
-
     return rs.to_json(orient="records")
 
 @app.route("/weather")

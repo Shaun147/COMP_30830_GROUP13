@@ -16,7 +16,8 @@ print('work')
 
 def create_table():
     sql = """
-    CREATE TABLE IF NOT EXISTS weather_Dublin(
+    CREATE TABLE IF NOT EXISTS weather(
+        dt VARCHAR(255) PRIMARY KEY,
         Clouds INTEGER,
         feels_like DOUBLE,
         humidity INTEGER,
@@ -31,7 +32,7 @@ def create_table():
         weather_main VARCHAR(255),
         wind_deg INTEGER,
         wind_speed DOUBLE,
-        dt VARCHAR(255) PRIMARY KEY
+        icon VARCHAR(255)
     );
     """
     try:
@@ -58,13 +59,14 @@ def write_to_db_weather(text):
         str(weather_data['weather'][0]['description']),
         str(weather_data['weather'][0]['main']),
         str(weather_data['wind']['deg']),
-        str(weather_data['wind']['speed'])
+        str(weather_data['wind']['speed']),
+        str(weather_data['weather'][0]['icon'])
     )
-    sql = """
-        INSERT INTO `dbbike13`.`weather_Dublin` (`Clouds`, `feels_like`, `humidity`, 
+    sql = """    
+        INSERT INTO `dbbike13`.`weather` (`dt`, `Clouds`, `feels_like`, `humidity`, 
         `pressure`, `temp`, `temp_max`, `temp_min`, `sunrise`, `sunset`, `visibility`, 
-        `weather_description`, `weather_main`, `wind_deg`, `wind_speed`, `dt`) VALUES 
-        ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')
+        `weather_description`, `weather_main`, `wind_deg`, `wind_speed`, `icon`) VALUES 
+        ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')
         """ % weather_vals
     print(sql)
     try:
@@ -91,6 +93,9 @@ while True:
         r = requests.get(weather_URL, params=parameters)
         print(r, now)
 
+        print(r.text)
+
+        print(json.loads(r.text))
         write_to_db_weather(r.text)
 
         time.sleep(5 * 60)
