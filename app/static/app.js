@@ -79,15 +79,15 @@ function display_station_info(value){
 }
 
 function now_time(){
-        var time = new Date();
-        var year = time.getFullYear();
-        var month = time.getMonth()+1;
-        var day = time.getDay();
-        var hour = time.getHours();
-        var minutes = time.getMinutes();
-        var seconds = time.getSeconds();
-        var rs = "time"+year+month+day+hour+minutes+seconds;
-        return rs;
+    var time = new Date();
+    var year = time.getFullYear();
+    var month = time.getMonth()+1;
+    var day = time.getDay();
+    var hour = time.getHours();
+    var minutes = time.getMinutes();
+    var seconds = time.getSeconds();
+    var rs = "time"+year+month+day+hour+minutes+seconds;
+    return rs;
 }
 
 function display_weather() {
@@ -109,5 +109,4 @@ function display_weather() {
         weather_img.src = "https://openweathermap.org/img/wn/" + data[0].icon + "@2x.png";
 
     })
-
 }
