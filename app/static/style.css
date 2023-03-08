@@ -59,6 +59,7 @@ body {
 #weather-container img {
     height: 60px;
     margin-right: 10px;
+    background: white;
 }
 
 #temperature {
