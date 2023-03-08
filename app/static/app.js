@@ -85,8 +85,8 @@ function now_time(){
     var day = time.getDay();
     var hour = time.getHours();
     var minutes = time.getMinutes();
-    var seconds = time.getSeconds();
-    var rs = "time"+year+month+day+hour+minutes+seconds;
+    var seconds = time.getSeconds().toString().padStart(2, '0');
+    var rs = "time: "+year+"/"+month+"/"+day+" "+hour+":"+minutes+":"+seconds;
     return rs;
 }
 
