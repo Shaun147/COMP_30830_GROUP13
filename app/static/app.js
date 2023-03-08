@@ -102,7 +102,6 @@ function display_weather() {
         var temperature = (data[0].temp - 274.15).toFixed(2) + "℃";
         document.getElementById("temperature").innerHTML = temperature;
 
-
         var time_string = now_time();
         document.getElementById("time-detail").innerHTML = time_string;
 
