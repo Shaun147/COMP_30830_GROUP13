@@ -99,11 +99,15 @@ function display_weather() {
         var weather_output = data[0].weather_description;
         document.getElementById("weather-description").innerHTML = weather_output;
 
+        var temperature = (data[0].temp - 274.15).toFixed(2) + "℃";
+        document.getElementById("temperature").innerHTML = temperature;
+
 
         var time_string = now_time();
         document.getElementById("time-detail").innerHTML = time_string;
 
-        var
+        var weather_img = document.getElementById("weather-icon");
+        weather_img.src = "https://openweathermap.org/img/wn/" + data[0].icon + "@2x.png";
 
     })
 

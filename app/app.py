@@ -49,8 +49,9 @@ def static_stations():
 
 @app.route("/weather")
 def weather():
-    sql = """SELECT weather_description, weather_main, humidity, wind_speed,visibility,sunrise,sunset,pressure 
-    FROM dbbike13.weather_Dublin
+    sql = """SELECT weather_description, weather_main, humidity, 
+    wind_speed,visibility,sunrise,sunset,pressure,icon,temp
+    FROM dbbike13.weather
     ORDER BY dt DESC
     LIMIT 1;"""
     rs = pd.read_sql(sql, engine)
@@ -60,6 +61,6 @@ def weather():
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8000)
-    # stations()
+
 
 
