@@ -36,7 +36,7 @@ def close_db(error):
 
 @app.route("/")
 def hello():
-    return render_template("index.html")
+    return render_template("index1.html")
 
 
 @app.route("/stations")
@@ -59,8 +59,6 @@ def get_stations():
     except Exception as e:
         print(traceback.format_exc())
         return f"error in get_stations: {e}", 404
-
-
 
 
 @app.route("/static_stations")
