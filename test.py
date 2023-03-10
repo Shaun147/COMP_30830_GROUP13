@@ -3,6 +3,7 @@ import pymysql
 import json
 import datetime as dt
 import time
+import sched
 
 NAME = "Dublin"
 STATIONS = "https://api.jcdecaux.com/vls/v1/stations"
@@ -19,8 +20,11 @@ city_name = 'Dublin,ie'
 
 parameters = {"q": city_name, "appid": weather_apiKey}
 weather_URL = "http://api.openweathermap.org/data/2.5/weather"
+future_weather_URL = "http://api.openweathermap.org/data/2.5/forecast"
 
-
+RESOURCE = requests.get("https://api.jcdecaux.com/vls/v1/stations?contract=Dublin&apiKey=%s" % APIKEY)
+RESOURCE_WEATHER = requests.get(weather_URL, params=parameters)
+RESOURCE_FUTURE_WEATHER = requests.get(future_weather_URL, params=parameters)
 
 db = pymysql.connect(
 host=HOST,
@@ -123,9 +127,10 @@ def write_to_db_weather(text):
         """ % weather_vals
     print(sql)
     try:
-        cur.execute(sql)
-        db.commit()
-        print("weather insert ok")
+        if is_exist_weather(weather_vals):
+            cur.execute(sql)
+            db.commit()
+            print("weather insert ok")
     except:
         db.rollback()
         print("weather insert wrong")
@@ -146,7 +151,48 @@ def is_exist_avail(list):
 
 def is_exist_weather(time):
     sql = """
-        SELECT * FROM dbbike13.weather_Dublin
+        SELECT * FROM dbbike13.weather
+        WHERE dt = "%s"
+        """ % time[0]
+    print(sql)
+    cur.execute(sql)
+    rs = cur.fetchall()
+    if rs == ():
+        return True
+    print("weather data is exist")
+    return False
+
+
+def write_to_db_future_weather(text):
+    whole_data = json.loads(text)
+    for each in whole_data['list']:
+        data_vals = (
+            str(each['dt']),
+            str(each['dt_txt']),
+            str(each['main']['temp_min']),
+            str(each['main']['temp_max']),
+            str(each['weather'][0]['main']),
+            str(each['weather'][0]['icon'])
+        )
+
+        sql = """
+            INSERT INTO `dbbike13`.`weather_future` (`dt`, `dt_txt`, `temp_min`, 
+            `temp_max`, `mian_weather`, `icon`) VALUES ('%s', '%s', '%s', '%s', '%s', '%s');
+        """ % data_vals
+        print(sql)
+        try:
+            if is_exist_future_weather(data_vals[0]):
+                cur.execute(sql)
+                db.commit()
+                print(f"weather {each['dt']} insert ok")
+        except:
+            db.rollback()
+            print("weather insert wrong")
+    print("whole weather insert ok")
+
+def is_exist_future_weather(time):
+    sql = """
+        SELECT * FROM dbbike13.weather_future
         WHERE dt = "%s"
         """ % time
     cur.execute(sql)
@@ -156,16 +202,19 @@ def is_exist_weather(time):
     print("weather data is exist")
     return False
 
-
-
-
-
-# write_to_db_station()
-while True:
-    RESOURCE = requests.get("https://api.jcdecaux.com/vls/v1/stations?contract=Dublin&apiKey=%s" % APIKEY)
-    RESOURCE_WEATHER = requests.get(weather_URL, params=parameters)
-
+def run_5m():
     write_to_db_weather(RESOURCE_WEATHER.text)
     write_to_db_availability()
+    scheduler.enter(300, 1, write_to_db_availability)
 
-    time.sleep(5 * 60)
+def run_3h():
+    write_to_db_future_weather(RESOURCE_FUTURE_WEATHER.text)
+    scheduler.enter(10800, 1, write_to_db_future_weather)
+
+scheduler = sched.scheduler(time.time, time.sleep)
+
+scheduler.enter(0, 1, run_5m)
+scheduler.enter(0, 1, run_3h)
+scheduler.run()
+
+

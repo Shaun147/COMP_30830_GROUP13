@@ -1,4 +1,22 @@
 let openInfoWindow = null;
+const  lowIcon= {
+    path: "M-1.547 12l6.563-6.609-1.406-1.406-5.156 5.203-2.063-2.109-1.406 1.406zM0 0q2.906 0 4.945 2.039t2.039 4.945q0 1.453-0.727 3.328t-1.758 3.516-2.039 3.070-1.711 2.273l-0.75 0.797q-0.281-0.328-0.75-0.867t-1.688-2.156-2.133-3.141-1.664-3.445-0.75-3.375q0-2.906 2.039-4.945t4.945-2.039z",
+    fillOpacity: 0.8,
+    fillColor: "red",
+    scale: 1.5,
+};
+const  mediumIcon= {
+    path: "M-1.547 12l6.563-6.609-1.406-1.406-5.156 5.203-2.063-2.109-1.406 1.406zM0 0q2.906 0 4.945 2.039t2.039 4.945q0 1.453-0.727 3.328t-1.758 3.516-2.039 3.070-1.711 2.273l-0.75 0.797q-0.281-0.328-0.75-0.867t-1.688-2.156-2.133-3.141-1.664-3.445-0.75-3.375q0-2.906 2.039-4.945t4.945-2.039z",
+    fillColor: "blue",
+    fillOpacity: 0.8,
+    scale: 1.5,
+};
+const  highIcon= {
+    path: "M-1.547 12l6.563-6.609-1.406-1.406-5.156 5.203-2.063-2.109-1.406 1.406zM0 0q2.906 0 4.945 2.039t2.039 4.945q0 1.453-0.727 3.328t-1.758 3.516-2.039 3.070-1.711 2.273l-0.75 0.797q-0.281-0.328-0.75-0.867t-1.688-2.156-2.133-3.141-1.664-3.445-0.75-3.375q0-2.906 2.039-4.945t4.945-2.039z",
+    fillColor: "green",
+    fillOpacity: 0.8,
+    scale: 1.5,
+};
 
 function initMap() {
     map = new google.maps.Map(document.getElementById("map"),
@@ -17,22 +35,6 @@ function add_marker() {
     fetch("/stations").then(response => {
         return response.json();
     }).then(data => {
-
-        const  lowIcon= {
-            path: "M-1.547 12l6.563-6.609-1.406-1.406-5.156 5.203-2.063-2.109-1.406 1.406zM0 0q2.906 0 4.945 2.039t2.039 4.945q0 1.453-0.727 3.328t-1.758 3.516-2.039 3.070-1.711 2.273l-0.75 0.797q-0.281-0.328-0.75-0.867t-1.688-2.156-2.133-3.141-1.664-3.445-0.75-3.375q0-2.906 2.039-4.945t4.945-2.039z",
-            fillColor: "red",
-            scale: 1,
-        };
-        const  mediumIcon= {
-            path: "M-1.547 12l6.563-6.609-1.406-1.406-5.156 5.203-2.063-2.109-1.406 1.406zM0 0q2.906 0 4.945 2.039t2.039 4.945q0 1.453-0.727 3.328t-1.758 3.516-2.039 3.070-1.711 2.273l-0.75 0.797q-0.281-0.328-0.75-0.867t-1.688-2.156-2.133-3.141-1.664-3.445-0.75-3.375q0-2.906 2.039-4.945t4.945-2.039z",
-            fillColor: "blue",
-            scale: 1,
-        };
-        const  highIcon= {
-            path: "M-1.547 12l6.563-6.609-1.406-1.406-5.156 5.203-2.063-2.109-1.406 1.406zM0 0q2.906 0 4.945 2.039t2.039 4.945q0 1.453-0.727 3.328t-1.758 3.516-2.039 3.070-1.711 2.273l-0.75 0.797q-0.281-0.328-0.75-0.867t-1.688-2.156-2.133-3.141-1.664-3.445-0.75-3.375q0-2.906 2.039-4.945t4.945-2.039z",
-            fillColor: "green",
-            scale: 1,
-        };
 
         data.forEach(station => {
             var marker = new google.maps.Marker({
@@ -79,7 +81,6 @@ function station_dropdown() {
     })
 }
 
-
 function display_station_info(value){
     fetch("/stations").then(response => {
         return response.json();
@@ -96,6 +97,8 @@ function display_station_info(value){
                 var marker = new google.maps.Marker({
                     position: { lat: station.position_lat, lng: station.position_lng },
                     map: map,
+                    icon: station.available_bikes <= 10 ? lowIcon :
+                    station.available_bikes <= 25 ? mediumIcon : highIcon
                 })
                 open_infowindow(station,marker);
             }

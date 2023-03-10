@@ -3,7 +3,6 @@ import traceback
 import requests
 import time
 import datetime as dt
-from datetime import datetime
 import json
 
 weather_apiKey = "e7138528cfa0e09e1ad22a15e2e2532a"
