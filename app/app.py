@@ -1,3 +1,4 @@
+import json
 from sqlalchemy import *
 import flask
 import pandas as pd
@@ -12,6 +13,7 @@ PASSWORD = "123456789"
 HOST = "dublinbikegroup13.c1msfserw61n.us-east-1.rds.amazonaws.com"
 PORT = 3306
 DATABASE = "dbbike13"
+
 
 
 engine = create_engine("mysql+pymysql://{}:{}@{}:{}/{}".format(USER, PASSWORD, HOST, PORT, DATABASE), echo=True)
@@ -35,7 +37,6 @@ def stations():
     ORDER BY s.number
     """
     rs = pd.read_sql(sql, engine)
-    print(rs)
     return rs.to_json(orient="records")
 
 @app.route("/static_stations")
@@ -55,12 +56,8 @@ def weather():
     ORDER BY dt DESC
     LIMIT 1;"""
     rs = pd.read_sql(sql, engine)
-    print(rs.to_json(orient="records"))
     return rs.to_json(orient="records")
-
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8000)
-
-
 
