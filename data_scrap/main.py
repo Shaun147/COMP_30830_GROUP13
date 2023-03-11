@@ -2,7 +2,9 @@ import requests
 import pymysql
 import time
 import sched
-from data_scrap import future_weather_scrap, bike_scrap, weather_scrap
+import future_weather_scrap
+import bike_scrap
+import weather_scrap
 
 NAME = "Dublin"
 STATIONS = "https://api.jcdecaux.com/vls/v1/stations"

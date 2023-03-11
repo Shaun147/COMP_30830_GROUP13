@@ -28,8 +28,8 @@ function initMap() {
 
     add_marker();
     station_dropdown();
-    setInterval(display_weather, 1000)
-    forecast()
+    setInterval(display_weather, 1000);
+    forecast();
 }
 
 function add_marker() {
