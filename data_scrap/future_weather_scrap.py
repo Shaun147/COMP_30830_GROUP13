@@ -38,6 +38,13 @@ def write_to_db_future_weather(text):
             str(each['weather'][0]['main']),
             str(each['weather'][0]['icon'])
         )
+        data_vals_update =(
+            str(each['main']['temp_min']),
+            str(each['main']['temp_max']),
+            str(each['weather'][0]['main']),
+            str(each['weather'][0]['icon']),
+            str(each['dt'])
+        )
 
         sql = """
             INSERT INTO `dbbike13`.`weather_future` (`dt`, `dt_txt`, `temp_min`, 
@@ -45,7 +52,7 @@ def write_to_db_future_weather(text):
         """ % data_vals
         print(sql)
         try:
-            if is_exist_future_weather(data_vals[0]):
+            if is_exist_future_weather(data_vals[0], data_vals_update):
                 cur.execute(sql)
                 db.commit()
                 print(f"weather {each['dt']} insert ok")
@@ -54,7 +61,7 @@ def write_to_db_future_weather(text):
             print("weather insert wrong")
     print("whole weather insert ok")
 
-def is_exist_future_weather(time):
+def is_exist_future_weather(time,data_vals_update):
     sql = """
         SELECT * FROM dbbike13.weather_future
         WHERE dt = "%s"
@@ -64,5 +71,15 @@ def is_exist_future_weather(time):
     if rs == ():
         return True
     print("weather data is exist")
+    update_future_weather(data_vals_update)
     return False
 
+def update_future_weather(data_vals_update):
+    sql = """
+                UPDATE `dbbike13`.`weather_future` SET 
+                `temp_min` = "%s", `temp_max` = "%s", `main_weather` = "%s", `icon` = "%s" 
+                WHERE `dt` = "%s"
+            """ % data_vals_update
+    cur.execute(sql)
+    db.commit()
+    print("weather info updated")
