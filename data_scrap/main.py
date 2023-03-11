@@ -37,16 +37,14 @@ cur = db.cursor()
 
 
 def run_5m():
-    print("***************5************")
     weather_scrap.write_to_db_weather(RESOURCE_WEATHER.text)
     bike_scrap.write_to_db_availability()
-    scheduler.enter(300, 1, bike_scrap.write_to_db_availability)
+    scheduler.enter(300, 1, run_5m)
 
 
 def run_3h():
-
     future_weather_scrap.write_to_db_future_weather(RESOURCE_FUTURE_WEATHER.text)
-    scheduler.enter(10800, 1, future_weather_scrap.write_to_db_future_weather)
+    scheduler.enter(10800, 1, run_3h)
 
 
 scheduler = sched.scheduler(time.time, time.sleep)

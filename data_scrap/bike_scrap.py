@@ -109,7 +109,6 @@ def write_to_db_station():
     except:
         db.rollback()
         print("insert wrong")
-    db.close()
 
 def write_to_db_availability():
     availability_lists = get_availability()
@@ -127,7 +126,6 @@ def write_to_db_availability():
     except:
         db.rollback()
         print("insert wrong")
-    db.close()
 
 def is_exist_avail(list):
     list = (list[0], list[1])

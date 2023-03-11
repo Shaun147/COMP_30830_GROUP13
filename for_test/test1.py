@@ -15,12 +15,12 @@ scheduler = sched.scheduler(time.time, time.sleep)
 def run_func1():
     func1()
     print('ok')
-    scheduler.enter(5, 1, run_func1)
+    scheduler.enter(1, 1, run_func1)
 
 # Schedule the execution of func2 every 3 hours
 def run_func2():
     func2()
-    scheduler.enter(20, 1, run_func2)
+    scheduler.enter(2, 1, run_func2)
 
 # Start the scheduler
 scheduler.enter(0, 1, run_func1)

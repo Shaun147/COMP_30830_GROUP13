@@ -181,6 +181,12 @@ function forecast(){
 
                 main_weather.push(datetime.main_weather);
                 main_weather_icon.push(datetime.icon);
+                if(i_day == 3){
+                    console.log(main_weather);
+                    console.log(main_weather_icon)
+                }
+
+
 
                 if(datetime.temp_max > temp_max){
                     temp_max = datetime.temp_max
