@@ -58,6 +58,19 @@ def weather():
     rs = pd.read_sql(sql, engine)
     return rs.to_json(orient="records")
 
+@app.route("/forecast")
+def forecast():
+    sql = """
+    SELECT*
+    FROM (SELECT * 
+    FROM dbbike13.weather_future
+    ORDER BY dt DESC
+    LIMIT 48) AS temp
+    ORDER BY dt
+    """
+    rs = pd.read_sql(sql, engine)
+    return rs.to_json(orient="records")
+
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8000)
 

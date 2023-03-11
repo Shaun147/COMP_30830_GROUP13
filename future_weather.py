@@ -19,7 +19,7 @@ def create_table():
       `dt_txt` VARCHAR(255) NOT NULL,
       `temp_min` INT NULL,
       `temp_max` INT NULL,
-      `mian_weather` VARCHAR(255),
+      `main_weather` VARCHAR(255),
       `icon` VARCHAR(255),
       PRIMARY KEY (`dt`, `dt_txt`));
     """
@@ -44,7 +44,7 @@ def write_to_db_future_weather(text):
 
         sql = """
             INSERT INTO `dbbike13`.`weather_future` (`dt`, `dt_txt`, `temp_min`, 
-            `temp_max`, `mian_weather`, `icon`) VALUES ('%s', '%s', '%s', '%s', '%s', '%s');
+            `temp_max`, `main_weather`, `icon`) VALUES ('%s', '%s', '%s', '%s', '%s', '%s');
         """ % data_vals
         print(sql)
         try:

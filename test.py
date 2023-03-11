@@ -177,7 +177,7 @@ def write_to_db_future_weather(text):
 
         sql = """
             INSERT INTO `dbbike13`.`weather_future` (`dt`, `dt_txt`, `temp_min`, 
-            `temp_max`, `mian_weather`, `icon`) VALUES ('%s', '%s', '%s', '%s', '%s', '%s');
+            `temp_max`, `main_weather`, `icon`) VALUES ('%s', '%s', '%s', '%s', '%s', '%s');
         """ % data_vals
         print(sql)
         try:

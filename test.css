@@ -20,12 +20,14 @@ body {
 }
 
 
-.left-column {
+.left_column {
     width:55vw;
     height:84vh;
 }
 
-.right-column {
+#left
+
+.right_column {
     width:40vw;
     height:84vh;
 }
@@ -42,12 +44,32 @@ body {
 
 }
 
-#weather-heading {
+#weather_heading {
     font-size: 20px;
     margin-top: 0;
 }
 
-#weather-container {
+#weather_info {
+    display:flex;
+}
+
+#forecast_window{
+    display:flex;
+    list-style:none;
+}
+
+.future_weather{
+    padding-right:40px;
+}
+
+#left_curr {
+
+}
+#right_future{
+
+}
+
+#weather_container {
     display: flex;
     align-items: center;
     background-color: #e6e6e6;
@@ -56,10 +78,12 @@ body {
     margin-bottom: 20px;
 }
 
-#weather-container img {
+#weather_container img {
     height: 60px;
     margin-right: 10px;
 }
+
+
 
 #temperature {
     font-size: 25px;
@@ -72,11 +96,11 @@ body {
 }
 
 
-.right-column {
+.right_column {
     flex: 1;
 }
 
-#bike-station-select {
+#bike_station_select {
     margin-bottom: 20px;
 }
 
@@ -94,24 +118,24 @@ select {
     background-color: #f2f2f2;
 }
 
-#station-table {
+#station_table {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px;
 }
 
-#station-table th {
+#station_table th {
     background-color: #333;
     color: white;
     text-align: left;
     padding: 10px;
 }
 
-#station-table tr:nth-child(even) {
+#station_table tr:nth-child(even) {
     background-color: #f2f2f2;
 }
 
-#station-table td {
+#station_table td {
     border: 1px solid #ddd;
     padding: 10px;
 }
