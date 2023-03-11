@@ -21,7 +21,7 @@ engine = create_engine("mysql+pymysql://{}:{}@{}:{}/{}".format(USER, PASSWORD, H
 @app.route("/")
 def hello():
     # return "hello"
-    return flask.render_template("index1.html")
+    return flask.render_template("index.html")
 
 
 @app.route("/stations")

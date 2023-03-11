@@ -1,16 +1,13 @@
 import pymysql
-import traceback
-import requests
-import time
-import datetime as dt
 import json
 
-weather_apiKey = "e7138528cfa0e09e1ad22a15e2e2532a"
-city_name = 'Dublin,ie'
-parameters = {"q": city_name, "appid": weather_apiKey}
-weather_URL = "http://api.openweathermap.org/data/2.5/forecast"
-
-
+db = pymysql.connect(
+    host="dublinbikegroup13.c1msfserw61n.us-east-1.rds.amazonaws.com",
+    user="group13",
+    password="123456789",
+    port=3306,
+    database="dbbike13")
+cur = db.cursor()
 
 def create_table():
     sql = """
@@ -68,26 +65,4 @@ def is_exist_future_weather(time):
         return True
     print("weather data is exist")
     return False
-
-
-while True:
-    try:
-        db = pymysql.connect(
-            host="dublinbikegroup13.c1msfserw61n.us-east-1.rds.amazonaws.com",
-            user="group13",
-            password="123456789",
-            port=3306,
-            database="dbbike13")
-        cur = db.cursor()
-        create_table()
-
-        now = dt.datetime.now()
-        r = requests.get(weather_URL, params=parameters)
-        print(r, now)
-        print(r.text)
-        write_to_db_future_weather(r.text)
-        time.sleep(5 * 60)
-
-    except:
-        print(traceback.format_exc())
 

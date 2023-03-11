@@ -139,14 +139,8 @@ def is_exist_avail(list):
     cur.execute(sql)
     rs = cur.fetchall()
     if rs == ():
+        print("none")
         return True
     print("is exist")
     return False
-
-
-
-# write_to_db_station()
-while True:
-    write_to_db_availability()
-    time.sleep(5 * 60)
 

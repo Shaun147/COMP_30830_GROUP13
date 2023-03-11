@@ -1,17 +1,14 @@
 import pymysql
-import traceback
-import requests
-import time
 import datetime as dt
 import json
 
-weather_apiKey = "e7138528cfa0e09e1ad22a15e2e2532a"
-city_name = 'Dublin,ie'
-parameters = {"q": city_name, "appid": weather_apiKey}
-weather_URL = "http://api.openweathermap.org/data/2.5/weather"
-
-print('work')
-
+db = pymysql.connect(
+    host="dublinbikegroup13.c1msfserw61n.us-east-1.rds.amazonaws.com",
+    user="group13",
+    password="123456789",
+    port=3306,
+    database="dbbike13")
+cur = db.cursor()
 
 def create_table():
     sql = """
@@ -69,35 +66,25 @@ def write_to_db_weather(text):
         """ % weather_vals
     print(sql)
     try:
-        cur.execute(sql)
-        db.commit()
-        print("weather insert ok")
+        if is_exist_weather(weather_vals):
+            cur.execute(sql)
+            db.commit()
+            print("weather insert ok")
     except:
         db.rollback()
         print("weather insert wrong")
 
 
-while True:
-    try:
-        db = pymysql.connect(
-            host="dublinbikegroup13.c1msfserw61n.us-east-1.rds.amazonaws.com",
-            user="group13",
-            password="123456789",
-            port=3306,
-            database="dbbike13")
-        cur = db.cursor()
-        # create_table()
 
-        now = dt.datetime.now()
-        r = requests.get(weather_URL, params=parameters)
-        print(r, now)
-
-        print(r.text)
-
-        print(json.loads(r.text))
-        write_to_db_weather(r.text)
-
-        time.sleep(5 * 60)
-
-    except:
-        print(traceback.format_exc())
+def is_exist_weather(time):
+    sql = """
+        SELECT * FROM dbbike13.weather
+        WHERE dt = "%s"
+        """ % time[0]
+    print(sql)
+    cur.execute(sql)
+    rs = cur.fetchall()
+    if rs == ():
+        return True
+    print("weather data is exist")
+    return False
