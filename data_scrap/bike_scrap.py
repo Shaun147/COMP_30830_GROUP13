@@ -1,29 +1,15 @@
 import requests
-import pymysql
 import json
 import datetime as dt
-import time
+import db_info
 
 NAME = "Dublin"
 STATIONS = "https://api.jcdecaux.com/vls/v1/stations"
 APIKEY = "8baeb25cfb9a5eb1f76dec99338e19bcd20e4386"
-
-USER = "group13"
-PASSWORD = "123456789"
-HOST = "dublinbikegroup13.c1msfserw61n.us-east-1.rds.amazonaws.com"
-PORT = 3306
-DATABASE = "dbbike13"
-
 RESOURCE = requests.get("https://api.jcdecaux.com/vls/v1/stations?contract=Dublin&apiKey=8baeb25cfb9a5eb1f76dec99338e19bcd20e4386")
 
-db = pymysql.connect(
-host=HOST,
-user=USER,
-password=PASSWORD,
-port=PORT,
-database=DATABASE)
+db = db_info.db_info()
 cur = db.cursor()
-
 
 def initialise_table():
     sql = """

@@ -1,33 +1,31 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>{% block title %}{% endblock %} - My Flask App</title>
-    <link href="test.css" rel="stylesheet" type="text/css">
-    <script type="text/javascript" src="{{ url_for('static', filename='app.js') }}"></script>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}{% endblock %} - My Flask App</title>
+        <link href="test.css" rel="stylesheet" type="text/css">
+    </head>
 
+    <body>
+        <header class="header" id="heading_banner">
+            <h1>Dublin Bikes</h1>
+        </header>
 
-  </head>
+        <div class="container">
 
-  <body>
-    <header class="header" id="heading_banner">
-      <h1>Dublin Bikes</h1>
-    </header>
-
-    <div class="container">
-      <div class="left_column">
-        <h1>Dublin Bike Station Map</h1>
-          <div id="map"></div>
-          <h2 id="weather_heading">Current Weather in Dublin</h2>
-          <div id="weather_container">
-              <div id="weather_info">
-                  <div id="left_curr">
-                      <img class="weather_icon" src="https://openweathermap.org/img/wn/10d@2x.png" alt="Weather icon">
-                      <p id="temperature">12°C</p>
-                      <p id="weather_description">dfsdfsdf</p>
-                      <p id="time_detail">sdfsdfsdfdsf</p>
-                  </div>
-                  <div id="right_future">
+            <div class="left_column">
+                <h1>Dublin Bike Station Map</h1>
+                <div id="map"></div>
+                <h2 id="weather_heading">Current Weather in Dublin</h2>
+                <div id="weather_container">
+                    <div id="weather_info">
+                        <div id="left_curr">
+                            <img class="weather_icon" src="https://openweathermap.org/img/wn/10d@2x.png" alt="Weather icon">
+                            <p id="temperature"></p>
+                            <p id="weather_description"></p>
+                            <p id="time_detail"></p>
+                        </div>
+                        <div id="right_future">
                       <ul id="forecast_window">
                           <li class="future_weather">
                               <img class="weather_icon" src="https://openweathermap.org/img/wn/10d@2x.png" alt="Weather icon">
@@ -67,25 +65,36 @@
 
                       </ul>
                   </div>
+                    </div>
+                </div>
+            </div>
 
-              </div>
-          </div>
-      </div>
+        <div class="right_column">
 
-      <div class="right_column">
-        <div id="bike_station_select">
-            <label for="station_select">Select a bike station:</label>
-            <select id="station_select" onchange="display_station_info(this.value)"></select>
+            <div id="bike_station_select">
+                <label for="station_select">Select a bike station:</label>
+                <select id="station_select" onchange="display_station_info(this.value)"></select>
+            </div>
+
+            <div id="bike-station-availability">
+                <h2>Bike Station Availability</h2>
+                <table id="station_table"></table>
+            </div>
+
+            <div id = "statistics">
+              statistic windows
+                <button id="graph-button">Show Graph</button>
+                <div id="graph-container"></div>
+            </div>
+
+
         </div>
-
-        <h2>Bike Station Availability</h2>
-            <table id="station_table"></table>
-      </div>
     </div>
 
     <script
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBcfizGN4iUUhAxTviaQD7p_QYLkQE7cCs&callback=initMap&libraries=&v=weekly"
         async></script>
+    <script type="text/javascript" src="test.js"></script>
 
 
 

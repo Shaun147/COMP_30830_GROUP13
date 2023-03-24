@@ -1,24 +1,17 @@
 import requests
-import pymysql
 import time
 import sched
 import future_weather_scrap
 import bike_scrap
 import weather_scrap
 
+
 NAME = "Dublin"
 STATIONS = "https://api.jcdecaux.com/vls/v1/stations"
 APIKEY = "8baeb25cfb9a5eb1f76dec99338e19bcd20e4386"
 
-USER = "group13"
-PASSWORD = "123456789"
-HOST = "dublinbikegroup13.c1msfserw61n.us-east-1.rds.amazonaws.com"
-PORT = 3306
-DATABASE = "dbbike13"
-
 weather_apiKey = "e7138528cfa0e09e1ad22a15e2e2532a"
 city_name = 'Dublin,ie'
-
 parameters = {"q": city_name, "appid": weather_apiKey}
 weather_URL = "http://api.openweathermap.org/data/2.5/weather"
 future_weather_URL = "http://api.openweathermap.org/data/2.5/forecast"
@@ -26,14 +19,6 @@ future_weather_URL = "http://api.openweathermap.org/data/2.5/forecast"
 RESOURCE = requests.get("https://api.jcdecaux.com/vls/v1/stations?contract=Dublin&apiKey=%s" % APIKEY)
 RESOURCE_WEATHER = requests.get(weather_URL, params=parameters)
 RESOURCE_FUTURE_WEATHER = requests.get(future_weather_URL, params=parameters)
-
-db = pymysql.connect(
-host=HOST,
-user=USER,
-password=PASSWORD,
-port=PORT,
-database=DATABASE)
-cur = db.cursor()
 
 
 def run_5m():

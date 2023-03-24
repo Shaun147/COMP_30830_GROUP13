@@ -1,13 +1,8 @@
-import pymysql
 import datetime as dt
 import json
+import db_info
 
-db = pymysql.connect(
-    host="dublinbikegroup13.c1msfserw61n.us-east-1.rds.amazonaws.com",
-    user="group13",
-    password="123456789",
-    port=3306,
-    database="dbbike13")
+db = db_info.db_info()
 cur = db.cursor()
 
 def create_table():

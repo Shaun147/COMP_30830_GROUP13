@@ -139,3 +139,18 @@ select {
     border: 1px solid #ddd;
     padding: 10px;
 }
+
+#graph-button {
+  background-color: blue;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#graph-container {
+  width: 500px;
+  height: 300px;
+  border: 1px solid black;
+}

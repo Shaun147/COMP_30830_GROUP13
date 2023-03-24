@@ -1,55 +1,111 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>{% block title %}{% endblock %} - My Flask App</title>
-    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet" type="text/css">
-    <script type="text/javascript" src="{{ url_for('static', filename='app.js') }}"></script>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}{% endblock %} - My Flask App</title>
+        <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet" type="text/css">
+        <script type="text/javascript" src="{{ url_for('static', filename='app.js') }}"></script>
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    </head>
 
+    <body>
+        <header class="header" id="heading_banner">
+            <h1>Dublin Bikes</h1>
+        </header>
 
-  </head>
+        <div class="container">
 
-  <body>
-    <header class="header" id="heading_banner">
-      <h1>Dublin Bikes</h1>
-    </header>
+            <div class="left_column">
+                <h1>Dublin Bike Station Map</h1>
+                <div id="map"></div>
+                <h2 id="weather_heading">Current Weather in Dublin</h2>
+                <div id="weather_container">
+                    <div id="weather_info">
+                        <div id="left_curr">
+                            <img id="curr-weather-icon" src="https://openweathermap.org/img/wn/10d@2x.png" alt="Weather icon">
+                            <p id="temperature"></p>
+                            <p id="weather_description"></p>
+                            <p id="time_detail"></p>
+                        </div>
+                        <div id="right_future">
+                      <ul id="forecast_window">
+                          <li class="future_weather">
+                              <img class="weather_icon" src="https://openweathermap.org/img/wn/10d@2x.png" alt="Weather icon">
+                              <br>
+                              12°C
+                              <br>
+                              3/20
+                          </li>
+                          <li class="future_weather">
+                              <img class="weather_icon" src="https://openweathermap.org/img/wn/10d@2x.png" alt="Weather icon">
+                              <br>
+                              12°C
+                              <br>
+                              3/20
+                          </li>
+                          <li class="future_weather">
+                              <img class="weather_icon" src="https://openweathermap.org/img/wn/10d@2x.png" alt="Weather icon">
+                              <br>
+                              12°C
+                              <br>
+                              3/20
+                          </li>
+                          <li class="future_weather">
+                              <img class="weather_icon" src="https://openweathermap.org/img/wn/10d@2x.png" alt="Weather icon">
+                              <br>
+                              12°C
+                              <br>
+                              3/20
+                          </li>
+                          <li class="future_weather">
+                              <img class="weather_icon" src="https://openweathermap.org/img/wn/10d@2x.png" alt="Weather icon">
+                              <br>
+                              12°C
+                              <br>
+                              3/20
+                          </li>
 
-    <div class="container">
-      <div class="left_column">
-        <h1>Dublin Bike Station Map</h1>
-          <div id="map"></div>
-          <h2 id="weather_heading">Current Weather in Dublin</h2>
-          <div id="weather_container">
-              <div id="weather_info">
-                  <div id="left_curr">
-                      <img class="weather_icon" id="curr_weather_icon" src="" alt="Weather icon">
-                      <p id="temperature"></p>
-                      <p id="weather_description"></p>
-                      <p id="time_detail"></p>
+                      </ul>
                   </div>
-                  <div id="right_future">
-                      <ul id="forecast_window"></ul>
-                  </div>
-              </div>
-          </div>
-      </div>
+                    </div>
+                </div>
+            </div>
 
-      <div class="right_column">
-        <div id="bike_station_select">
-            <label for="station_select">Select a bike station:</label>
-            <select id="station_select" onchange="display_station_info(this.value)"></select>
+        <div class="right_column">
+
+            <div id="bike_station_select">
+                <label for="station_select">Select a bike station:</label>
+                <select id="station_select" onchange="display_station_info()" >
+                    <option value ="volvo">Volvo</option>
+                </select>
+            </div>
+
+            <div id="bike-station-availability">
+                <h2>Bike Station Availability</h2>
+                <table id="station_table">
+                    <tr>
+                      <th>Name: null </th>
+                      <th>Available Stands:  null  </th>
+                      <th>Available Bikes:  null </th>
+                      <th>Status:  null </th>
+                    </tr>
+                </table>
+            </div>
+
+            <div id = "statistics">
+              statistic windows
+                <button id="graph-button" onclick="display_graph_week()">day of week</button>
+                <button id="graph-button2" onclick="display_graph_hourly()">hourly</button>
+                <div id="graph-container"></div>
+            </div>
+
+
         </div>
-
-        <h2>Bike Station Availability</h2>
-            <table id="station_table"></table>
-      </div>
     </div>
 
     <script
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBcfizGN4iUUhAxTviaQD7p_QYLkQE7cCs&callback=initMap&libraries=&v=weekly"
         async></script>
-
-
 
 
   </body>
