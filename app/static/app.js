@@ -1,5 +1,7 @@
+// set a global info window
 let openInfoWindow = null;
 
+// create 3 different icon for stations
 const  lowIcon= {
     path: "M-1.547 12l6.563-6.609-1.406-1.406-5.156 5.203-2.063-2.109-1.406 1.406zM0 0q2.906 0 4.945 2.039t2.039 4.945q0 1.453-0.727 3.328t-1.758 3.516-2.039 3.070-1.711 2.273l-0.75 0.797q-0.281-0.328-0.75-0.867t-1.688-2.156-2.133-3.141-1.664-3.445-0.75-3.375q0-2.906 2.039-4.945t4.945-2.039z",
     fillOpacity: 0.8,
@@ -19,6 +21,7 @@ const  highIcon= {
     scale: 1.5,
 };
 
+// insert map and call other functions
 function initMap() {
     map = new google.maps.Map(document.getElementById("map"),
     {
@@ -26,14 +29,19 @@ function initMap() {
         zoom: 14,
         zoomControl: true
     });
+
+    // loading the packages of graph drawing
     google.charts.load('current', {'packages':['bar']});
     google.charts.load('current', {'packages':['corechart']});
     add_marker();
     station_dropdown();
+    // show the current weather and time each second
     setInterval(display_weather, 1000);
     forecast();
 }
 
+// add markers to each station and call the info window of station
+// when click the marker in the map, the statistic graph and available table will be called
 function add_marker() {
     fetch("/stations").then(response => {
         return response.json();
@@ -58,6 +66,7 @@ function add_marker() {
     });
 }
 
+// use to open the info window
 function open_infowindow(station, marker){
     console.log("open_infowindow work");
     if (openInfoWindow) {
@@ -74,6 +83,7 @@ function open_infowindow(station, marker){
     openInfoWindow = infowindow;
 }
 
+// create the options to dropdown
 function station_dropdown() {
     fetch("/static_stations").then(response => {
         return response.json()
@@ -86,6 +96,7 @@ function station_dropdown() {
     })
 }
 
+// short the name of the day
 function getShortDayName(dayName) {
   const shortDayNames = {
     'Sunday': 'Sun',
@@ -99,6 +110,7 @@ function getShortDayName(dayName) {
   return shortDayNames[dayName] || '';
 }
 
+// use to show the graph of everyday using
 function display_graph_week(){
 
     const dropdown = document.getElementById('station_select');
@@ -133,6 +145,7 @@ function display_graph_week(){
     });
 }
 
+// use to show the graph of hourly using
 function display_graph_hourly() {
     const dropdown = document.getElementById('station_select');
     var value = dropdown.value;
@@ -151,7 +164,7 @@ function display_graph_hourly() {
 
         data.forEach(day => {
             const all_places = day.avg_bikes + day.avg_stands;
-            hour_data.addRow([day.Hourly.toString(), day.avg_bikes, day.avg_stands, all_places]);
+            hour_data.addRow([day.Hourly.toString()+":00", day.avg_bikes, day.avg_stands, all_places]);
         });
 
         var options = {
@@ -164,6 +177,8 @@ function display_graph_hourly() {
     });
 }
 
+// use to show the available information
+// when showing available information, statistic graph showing
 function display_station_info(marker){
     const dropdown = document.getElementById('station_select');
     var value = dropdown.value;
@@ -197,6 +212,7 @@ function display_station_info(marker){
     })
 }
 
+// return a string of time of current time
 function now_time(){
     var time = new Date();
     var year = time.getFullYear();
@@ -209,6 +225,7 @@ function now_time(){
     return rs;
 }
 
+// using to show the weather info of current time
 function display_weather() {
     fetch("/weather").then(response => {
         return response.json();
@@ -229,6 +246,8 @@ function display_weather() {
     })
 }
 
+// there are 8 data points in one day
+// acquire the most frequency data as main info
 function main_weather_info(list) {
     var frequency = {};
     list.forEach(function(element){
@@ -247,10 +266,13 @@ function main_weather_info(list) {
     return mostFrequentElement;
 }
 
+
+// using to show the future weather information
 function forecast(){
     fetch("/forecast").then(response=>{
         return response.json();
     }).then(data => {
+        // obtain the timestamp of 00:00 of current day
         var time = new Date();
         time.setHours(0, 0, 0, 0);
         var today_timestamp = Math.floor(time.getTime() / 1000);
@@ -266,17 +288,14 @@ function forecast(){
         var li_content = "";
 
         data.forEach(datetime => {
+            // calculate the number of days after the current day
             i_day =Math.floor((datetime.dt - (today_timestamp + a_daytime)) / a_daytime)+1;
+
+            // only show 5 days
             if(i_day >= 0 && i_day <6){
 
                 main_weather.push(datetime.main_weather);
                 main_weather_icon.push(datetime.icon);
-                if(i_day == 3){
-                    console.log(main_weather);
-                    console.log(main_weather_icon)
-                }
-
-
 
                 if(datetime.temp_max > temp_max){
                     temp_max = datetime.temp_max
@@ -307,68 +326,5 @@ function forecast(){
         document.getElementById("forecast_window").innerHTML = li_content;
     })
 }
-
-//function add_marker() {
-//    fetch("/stations").then(response => {
-//        return response.json();
-//    }).then(data => {
-//        data.forEach(station => {
-//            var marker = new google.maps.Marker({
-//                position: { lat: station.position_lat, lng: station.position_lng },
-//                map: map,
-//                title: station.address,
-//                icon: station.available_bikes <= 10 ? lowIcon :
-//                station.available_bikes <= 25 ? mediumIcon : highIcon
-//            });
-//
-//            marker.addListener("click", () => {
-//                temp(station, marker);
-//                console.log(station.number);
-//                display_station_info(station.number);
-//            });
-//        });
-//    });
-//}
-//
-//function temp(station, marker){
-//    if (openInfoWindow) {
-//        openInfoWindow.close();
-//    }
-//
-//    const infowindow = new google.maps.InfoWindow({
-//        content: "<h2>" + station.name + "</h2>"
-//            + "<p><b>Available Bikes: </b>" + station.available_bikes + "</p>"
-//            + "<p><b>Available Stands: </b>" + station.available_bike_stands + "</p>"
-//            + "<p><b>Status: </b>" + station.status + "</p>"
-//    });
-//
-//    infowindow.open(map, marker);
-//    openInfoWindow = infowindow;
-//
-//}
-//
-//function display_station_info(number) {
-//    const dropdown = document.getElementById('station_select');
-//    var value = dropdown.value;
-//
-//    if (typeof (number) != 'undefined') value = number;
-//
-//    fetch("/stations").then(response => {
-//        return response.json();
-//    }).then(data => {
-//        data.forEach(station => {
-//            if (station.number == value) {
-//                var table_content = "<tr>"
-//                    + "<th>Name: " + station.name + "</th>"
-//                    + "<th>Available Stands: " + station.available_bike_stands + "</th>"
-//                    + "<th>Available Bikes: " + station.available_bikes + "</th>"
-//                    + "<th>Status: " + station.status + "</th>"
-//                    + "</tr>";
-//                document.getElementById("station_table").innerHTML = table_content;
-//
-//            }
-//        })
-//    })
-//}
 
 
