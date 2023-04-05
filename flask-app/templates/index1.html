@@ -2,89 +2,61 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>{% block title %}{% endblock %}Dublin Bikes</title>
+    <title>{% block title %}{% endblock %} - My Flask App</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <script type="module" src="{{ url_for('static', filename='js/index.js') }}"></script>
-
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="{{ url_for('static', filename='app.js') }}"></script>
     
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-  
+
 
   </head>
 
   <body>
-
-  <header>
-    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-      <img src="static/images/logo-contract.png" alt="Dublin Bikes" id="logo">
-      <div class="collapse navbar-collapse" id="collapsibleNavbar">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link" href="#">Sation Map</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Weather</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Station data</a>
-          </li>    
-        </ul>
-      </div>  
-    </nav>
-
+    <header class="header" id="heading-banner">
+      <h1>Dublin Bikes</h1>
+    </header>
 
     <div class="container">
       <div class="col-sm-6">
-        <h1 id="map-header">Dublin Bike Station Map</h1>
+        <h1>Dublin Bike Station Map</h1>
           <div id="map"></div>
-          <h2 id="weather-header">Current Weather in Dublin</h2>
+
+          <h2 id="weather-heading">Current Weather in Dublin</h2>
           <div id="weather-container">
-              <img src="https://www.met.ie/images/icons/weather-symbols/cloudy.svg" alt="Weather icon">
+              <img id="weather-icon" src="https://openweathermap.org/img/wn/10d@2x.png" alt="Weather icon">
               <div id="weather-info">
                   <p id="temperature">12°C</p>
-                  <p id="description">Mostly cloudy</p>
+                  <p id="weather-description"></p>
+                  <p id="time-detail"></p>
               </div>
           </div>
       </div>
 
-
       <div class="col-sm-6">
-        <div class="bike-station-select">
+        <div id="bike-station-select">
             <label for="station-select">Select a bike station:</label>
-            <select id="station-select">
-                <option value="">-- Please Select --</option>
-            </select>
+            <select id="station-select" onchange="display_station_info(this.value)"></select>
         </div>
+
         <h2>Bike Station Availability</h2>
-            <table>
-              <thead>
-              <tr>
-                  <th>Number</th>
-                  <th>Available Stands</th>
-                  <th>Available Bikes</th>
-                  <th>Status</th>
-                  <th>Last update</th>
-              </tr>
-              </thead>
-	          </table>
+            <table id="station-table"></table>
       </div>
-      
     </div>
 
     <script>
-    <script src="https://maps.googleapis.com/maps/api/js?
-    key=AIzaSyBcfizGN4iUUhAxTviaQD7p_QYLkQE7cCs&callback=initMap"
-    defer></script>
+        setInterval(display_weather, 1000)
+        station_dropdown();
     </script>
-    
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBcfizGN4iUUhAxTviaQD7p_QYLkQE7cCs&callback=initMap&libraries=&v=weekly"
+        async></script>
 
-    <footer>
-    </footer>
+
+
+
   </body>
 </html>
-
-
