@@ -93,6 +93,7 @@ function station_dropdown() {
             station_option_output += "<option value=" + station.number + ">" + station.name + "</option><br>";
         })
         document.getElementById("station_select").innerHTML = station_option_output;
+        document.getElementById("station_select2").innerHTML = station_option_output;
     })
 }
 
@@ -164,7 +165,7 @@ function display_graph_hourly() {
 
         data.forEach(day => {
             const all_places = day.avg_bikes + day.avg_stands;
-            hour_data.addRow([day.Hourly.toString()+":00", day.avg_bikes, day.avg_stands, all_places]);
+            hour_data.addRow([day.hourly.toString()+":00", day.avg_bikes, day.avg_stands, all_places]);
         });
 
         var options = {
@@ -266,7 +267,6 @@ function main_weather_info(list) {
     return mostFrequentElement;
 }
 
-
 // using to show the future weather information
 function forecast(){
     fetch("/forecast").then(response=>{
@@ -327,4 +327,131 @@ function forecast(){
     })
 }
 
+function get_weather_value(weather_str) {
+    const weatherTypes = ['Clouds', 'Drizzle', 'Rain', 'Clear', 'Snow', 'Mist'];
+    const weatherValues = [1, 2, 4, 0, 5, 3];
 
+    const index = weatherTypes.indexOf(weather_str);
+    return weatherValues[index];
+}
+
+function predict(number, list){
+    return fetch('/prediction', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            'number': number,
+            'input_features': list
+        })
+    })
+    .then(response => response.json())
+    .then(data => data.prediction)
+}
+
+//function prediction_statistic() {
+//    const dropdown = document.getElementById('station_select2');
+//    var value = dropdown.value;
+//    fetch("/forecast").then(response=>{
+//        return response.json();
+//    }).then(data => {
+//
+//        var week_predict_bikes = {};
+//        var week_predict_stands = {}
+//        var count = 0;
+//        data.forEach(each_data => {
+//            var input_feature_list = [each_data.feels_like, each_data.humidity,
+//                each_data.pressure, get_weather_value(each_data.main_weather),
+//                each_data.wind_speed, each_data.day_of_week, each_data.hourly];
+//            var day_of_week = each_data.day_of_week;
+//            if (!(day_of_week in week_predict_bikes)) {
+//                week_predict_bikes[day_of_week] = 0;
+//                week_predict_stands[day_of_week] = 0;
+//            }
+//
+//            predict(value, input_feature_list).then(resultArray => {
+//                week_predict_bikes[day_of_week] += resultArray[0][1];
+//                week_predict_stands[day_of_week] += resultArray[0][0];
+//                    count += 1;
+//                    console.log(count);
+//                    console.log(data.length);
+//                if(count == data.length){
+//                    var week_data = google.visualization.arrayToDataTable([]);
+//                    week_data.addColumn('string', 'day of week');
+//                    week_data.addColumn('number', 'bikes');
+//                    week_data.addColumn('number', 'stands');
+//
+//                    const daysOfWeek_list = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday',
+//                                             'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+//
+//                    const today = new Date();
+//                    const dayOfWeek = today.getDay();
+//
+//                    for (var i = 0; i < 5; i++) {
+//                        if (dayOfWeek == 0) dayOfWeek = 7;
+//                        var temp = dayOfWeek
+//                        if (dayOfWeek + i > 7) temp = dayOfWeek - 7;
+//                        week_data.addRow([getShortDayName(daysOfWeek_list[dayOfWeek + i]),
+//                        week_predict_bikes[temp - 1 + i]/8,
+//                        week_predict_stands[temp - 1 + i]/8]);
+//                    }
+//                    var options = {
+//                        chart: {
+//                            title: 'prediction by dat of week',
+//                            subtitle: 'bikes and stands',
+//                        }
+//                    };
+//                    var chart = new google.charts.Bar(document.getElementById('graph-container2'));
+//                    chart.draw(week_data, google.charts.Bar.convertOptions(options));
+//                }
+//            });
+//        });
+//    });
+//}
+
+function prediction_statistic() {
+    const dropdown = document.getElementById('station_select2');
+    var value = dropdown.value;
+    fetch("/forecast").then(response=>{
+        return response.json();
+    }).then(data => {
+        var hourly_predict_bikes = [];
+        var hourly_predict_stands = []
+        var count = 0;
+        const date_list = [];
+        data.forEach(each_data => {
+            var input_feature_list = [each_data.feels_like, get_weather_value(each_data.main_weather),
+                each_data.wind_speed, each_data.humidity, each_data.pressure,
+                each_data.day_of_week, each_data.hourly];
+            var day_of_week = each_data.day_of_week;
+            const time = parseInt(Date.now());
+            if(each_data.dt*1000 >= time) {
+                const date = new Date(each_data.dt*1000);
+                date_list.push(date);
+                predict(value, input_feature_list).then(resultArray => {
+                    hourly_predict_bikes.push(resultArray[0][1]);
+                    hourly_predict_stands.push(resultArray[0][0]);
+                    count += 1;
+                    if(count == 40){
+                        var hour_data = google.visualization.arrayToDataTable([]);
+                        hour_data.addColumn('string', 'hourly');
+                        hour_data.addColumn('number', 'predict bikes');
+                        for (var i = 0; i < 40; i++) {
+                              hour_data.addRow([date_list[i].getDate().toString()+'/'+
+                              (date_list[i].getHours()-1).toString()+':00',
+                              hourly_predict_bikes[i]]);
+                        }
+                        var options = {
+                            chart: {
+                                title: 'prediction by hourly',
+                                subtitle: 'bikes and stands',
+                            }
+                        };
+                        console.log('work', each_data.dt_txt);
+                        var chart = new google.charts.Bar(document.getElementById('graph-container2'));
+                        chart.draw(hour_data, google.charts.Bar.convertOptions(options));
+                    }
+                });
+            }
+        });
+    });
+}

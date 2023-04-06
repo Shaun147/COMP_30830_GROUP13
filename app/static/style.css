@@ -154,3 +154,9 @@ select {
   height: 280px;
   border: 1px solid black;
 }
+
+#graph-container2 {
+  width: 600px;
+  height: 280px;
+  border: 1px solid black;
+}

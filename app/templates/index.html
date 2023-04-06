@@ -97,6 +97,11 @@
                 <button id="graph-button" onclick="display_graph_week()">day of week</button>
                 <button id="graph-button2" onclick="display_graph_hourly()">hourly</button>
                 <div id="graph-container"></div>
+                <label for="station_select2">Select a bike station:</label>
+                <select id="station_select2" onchange="prediction_statistic()" >
+                    <option value ="volvo">Volvo</option>
+                </select>
+                <div id="graph-container2"></div>
             </div>
 
 

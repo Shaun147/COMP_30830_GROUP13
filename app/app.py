@@ -1,8 +1,12 @@
 import json
+import pickle
+from datetime import datetime
+
+from flask import request, jsonify
 from sqlalchemy import *
 import flask
 import pandas as pd
-
+import sklearn
 
 app = flask.Flask(__name__)
 NAME = "Dublin"
@@ -71,7 +75,7 @@ def availability_data(station_id):
 def hourly_data(station_id):
     sql = """
     SELECT avg(available_bike_stands) as avg_stands,
-    avg(available_bikes) as avg_bikes,EXTRACT(HOUR FROM last_update) as Hourly
+    avg(available_bikes) as avg_bikes,EXTRACT(HOUR FROM last_update) as hourly
     FROM dbbike13.availability 
     WHERE number = %d
     GROUP BY EXTRACT(HOUR FROM last_update)
@@ -111,6 +115,20 @@ def forecast():
     """
     rs = pd.read_sql(sql, engine)
     return rs.to_json(orient="records")
+
+@app.route("/prediction", methods=['POST'])
+def prediction():
+    data = request.get_json()
+    number = data['number']
+    input_features = data['input_features']
+
+    with open(f'../machine learning/station_{number}.pkl', 'rb') as f:
+        rf = pickle.load(f)
+
+    prediction = rf.predict([input_features]).tolist()
+    response = {'prediction': prediction}
+    return jsonify(response)
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8001)

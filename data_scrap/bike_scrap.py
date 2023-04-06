@@ -1,12 +1,6 @@
-import requests
 import json
 import datetime as dt
 import db_info
-
-NAME = "Dublin"
-STATIONS = "https://api.jcdecaux.com/vls/v1/stations"
-APIKEY = "8baeb25cfb9a5eb1f76dec99338e19bcd20e4386"
-RESOURCE = requests.get("https://api.jcdecaux.com/vls/v1/stations?contract=Dublin&apiKey=8baeb25cfb9a5eb1f76dec99338e19bcd20e4386")
 
 db = db_info.db_info()
 cur = db.cursor()
@@ -49,10 +43,11 @@ def initialise_table():
 
 
 # initialise_table()
-def get_stations():
+def get_stations(text):
     station_list=[]
-    stations=json.loads(RESOURCE.text)
+    stations=json.loads(text)
     for station in stations:
+        print(station)
         station_vals=(
             int(station.get('number')),
             station.get('name'),
@@ -67,9 +62,9 @@ def get_stations():
         station_list.append(station_vals)
     return station_list
 
-def get_availability():
+def get_availability(text):
     avail_list=[]
-    stations=json.loads(RESOURCE.text)
+    stations=json.loads(text)
     for station in stations:
         availability_vals=(
         station.get('number'),
@@ -81,8 +76,8 @@ def get_availability():
         avail_list.append(availability_vals)
     return avail_list
 
-def write_to_db_station():
-    station_lists = get_stations()
+def write_to_db_station(text):
+    station_lists = get_stations(text)
     try:
         for station in station_lists:
             sql = """
@@ -96,8 +91,8 @@ def write_to_db_station():
         db.rollback()
         print("insert wrong")
 
-def write_to_db_availability():
-    availability_lists = get_availability()
+def write_to_db_availability(text):
+    availability_lists = get_availability(text)
     try:
         for availability in availability_lists:
             sql = """
@@ -127,4 +122,3 @@ def is_exist_avail(list):
         return True
     print("is exist")
     return False
-
