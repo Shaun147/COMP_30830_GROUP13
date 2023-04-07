@@ -1,32 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
-  
-  <script src="app.js"></script>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="./bootstrap/css/bootstrap.min.css">
+    <link href="../static/style.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="../static/app.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
     <meta name="description" content="" />
     <meta name="keywords" content="bootstrap, bootstrap5" />
-
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-
-    <link rel="stylesheet" href="fonts/icomoon/style.css" />
-    <link rel="stylesheet" href="fonts/flaticon/font/flaticon.css" />
-
-    <link rel="stylesheet" href="css/tiny-slider.css" />
-    <link rel="stylesheet" href="css/aos.css" />
-    <link rel="stylesheet" href="css/style.css" />
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./fonts/icomoon/style.css" />
+    <link rel="stylesheet" href="./fonts/flaticon/font/flaticon.css" />
+    <link rel="stylesheet" href="./css/tiny-slider.css" />
+    <link rel="stylesheet" href="./css/aos.css" />
+    <link rel="stylesheet" href="./css/style.css" />
+    <link rel="stylesheet" href="./style.css">
   
 
   <title>Document</title>
@@ -126,9 +124,9 @@
           <div class="card">
             <div class="card-body">
               <!-- <h2 class="card-title">Bike station select</h2> -->
-              <div id="bike_station_select">
+              <div id="bike_station_select2">
                   <label for="station_select">Select a bike station:</label>
-                  <select id="station_select" onchange="display_station_info()" >
+                  <select id="station_select2" onchange="display_station_info()" >
                       <option value ="volvo">Volvo</option>
                   </select>
               </div>
@@ -149,7 +147,6 @@
                   </table>
                 </div>
               </div>
-
               </div>
             </div>
             <div class="mt-4 card">
@@ -159,19 +156,16 @@
                   <div class="col-lg-6">
                     <p>
                       <a
-                        
                         target="_blank"
                         class="btn btn-primary text-white py-3 px-4"
                         onclick="display_graph_week()"
                         >Weekly</a
                       >
                     </p>
-                    
                   </div>
                   <div class="col-lg-6">
                     <p>
                       <a
-                        
                         target="_blank"
                         class="btn btn-primary text-white py-3 px-4"
                         onclick="display_graph_hourly()"
@@ -180,17 +174,14 @@
                     </p>
                   </div>
                 </div>
-                <div id="graph-container"></div>
-
-          
+                <div id="graph-container2"></div>
               </div>
             </div>
          </div>
         </div>
-      
     </div>
   </div>
-</div>
+
 
 
 <div class="section pt-0">
@@ -281,24 +272,14 @@
                             <a class="dropdown-item" href="#">12</a>
                             </div>
                         </div>
+                      </div>
                     </div>
-                    <!-- <div class="col-sm-4">
-                        <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Minute
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton3">
-                            <a class="dropdown-item" href="#">30</a>
-                            </div>
-                        </div>
-                    </div> -->
-                    </div>                         
                   </div>             
               </div>
               <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">Bike avaliable at this station</h4>
-                    <div id="graph-container"></div>
+                    <div id="graph-container6"></div>
                 </div>
               </div>
           </div>
@@ -318,7 +299,7 @@
           <div class="card">
             <div class="card-body">
               <h3 class="card-title">Predicition Chart</h3>
-              <div id="graph-container"></div>
+              <div id="graph-container3"></div>
             </div>
           </div>
         </div>
@@ -332,7 +313,7 @@
         <div class="col-md-6">
           <div class="card" >
             <div class="card-body">
-              <div id="graph-container"></div>
+              <div id="graph-container4"></div>
             </div>
           </div>
         </div>
@@ -346,23 +327,19 @@
       </div>
     </div>
   </div>
-      
-    </div>
-  </div>
-
-
-    </div>
-  </div>
 
   <!-- jQuery -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <!-- Bootstrap JS -->
-  <script src="bootstrap/js/bootstrap.min.js"></script>
-  <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
     <script src="js/tiny-slider.js"></script>
     <script src="js/aos.js"></script>
     <script src="js/navbar.js"></script>
     <script src="js/counter.js"></script>
     <script src="js/custom.js"></script>
+    <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBcfizGN4iUUhAxTviaQD7p_QYLkQE7cCs&callback=initMap&libraries=&v=weekly"
+    async></script>
 </body>
 </html>

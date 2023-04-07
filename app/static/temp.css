@@ -1,0 +1,212 @@
+/* Body and Header */
+body {
+    margin: 0;
+    padding: 0;
+    font-family:'Courier New', Courier, monospace;
+    background-color: #f2f2f2;
+}
+
+.header {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 1px;
+}
+
+/* Container */
+.container {
+    display: flex;
+    padding: 20px;
+}
+
+
+.left_column {
+    width:55vw;
+    height:84vh;
+}
+
+#left
+
+.right_column {
+    width:40vw;
+    height:84vh;
+}
+
+#map_header {
+    text-align: center;
+}
+
+#map {
+    width: 97%;
+    height:65%;
+    margin-bottom: 20px;
+    background:green;
+
+}
+
+#weather_heading {
+    font-size: 20px;
+    margin-top: 0;
+}
+
+#weather_info {
+    display:flex;
+}
+
+#forecast_window{
+    display:flex;
+    list-style:none;
+}
+
+.future_weather{
+    padding-right:30px;
+}
+
+#left_curr {
+
+}
+#right_future{
+
+}
+
+#weather_container {
+    display: flex;
+    align-items: center;
+    background-color: #e6e6e6;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+#weather_container img {
+    height: 60px;
+    margin-right: 10px;
+}
+
+
+
+#temperature {
+    font-size: 25px;
+    font-weight: bold;
+    margin: 0;
+}
+
+#description {
+    margin: 0;
+}
+
+
+.right_column {
+    flex: 1;
+}
+
+#bike_station_select {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+select {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #f2f2f2;
+}
+
+#station_table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+#station_table th {
+    background-color: #333;
+    color: white;
+    text-align: left;
+    padding: 10px;
+}
+
+#station_table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+#station_table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+}
+
+#graph-button, #graph-button2 {
+  background-color: blue;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#graph-container {
+  width: 600px;
+  height: 280px;
+  border: 1px solid black;
+}
+
+#graph-container2 {
+  width: 600px;
+  height: 280px;
+  border: 1px solid black;
+}
+
+* { box-sizing: border-box; }
+body {
+  font: 16px Arial;
+}
+.autocomplete {
+  /*容器定位设置为 relative:*/
+  position: relative;
+  display: inline-block;
+}
+input {
+  border: 1px solid transparent;
+  background-color: #f1f1f1;
+  padding: 10px;
+  font-size: 16px;
+}
+input[type=text] {
+  background-color: #f1f1f1;
+  width: 100%;
+}
+input[type=submit] {
+  background-color: DodgerBlue;
+  color: #fff;
+}
+.autocomplete-items {
+  position: absolute;
+  border: 1px solid #d4d4d4;
+  border-bottom: none;
+  border-top: none;
+  z-index: 99;
+  /*设置自动填充项宽度与容器相同*/
+  top: 100%;
+  left: 0;
+  right: 0;
+}
+.autocomplete-items div {
+  padding: 10px;
+  cursor: pointer;
+  background-color: #fff;
+  border-bottom: 1px solid #d4d4d4;
+}
+.autocomplete-items div:hover {
+  /*鼠标移动到填充项设置的背景颜色*/
+  background-color: #e9e9e9;
+}
+.autocomplete-active {
+  /*使用箭头键浏览填充项时的背景颜色*/
+  background-color: DodgerBlue !important;
+  color: #ffffff;
+}
