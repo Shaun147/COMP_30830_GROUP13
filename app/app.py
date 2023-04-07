@@ -129,6 +129,15 @@ def prediction():
     response = {'prediction': prediction}
     return jsonify(response)
 
+@app.route("/predict_plan/<int:timestamp>")
+def predict_plan(timestamp):
+    sql = """
+    SELECT * FROM dbbike13.weather_future
+    ORDER BY ABS(%d - `dt`) asc
+    LIMIT 1;
+    """%timestamp
+    rs = pd.read_sql(sql, engine)
+    return rs.to_json(orient="records")
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8001)

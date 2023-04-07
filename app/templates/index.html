@@ -99,8 +99,19 @@
                 <div id="graph-container"></div>
                 <label for="station_select2">Select a bike station:</label>
                 <select id="station_select2" onchange="prediction_statistic()" >
-                    <option value ="volvo">Volvo</option>
                 </select>
+                <select id="predict_day" onchange="predict_hour_dropdown()">
+                    <option value='' disabled selected>-- Please Select The Station First--</option>
+                </select>
+                <select id="predict_hour" onchange="prediction_result()">
+                    <option value='' disabled selected>-- Please Select The Day First--</option>
+                </select>
+                <table id="predict_table">
+                    <tr>
+                      <th>Predict Stands:  null  </th>
+                      <th>Predict Bikes:  null </th>
+                    </tr>
+                </table>
                 <div id="graph-container2"></div>
             </div>
 
