@@ -21,6 +21,7 @@ const  highIcon= {
     scale: 1.5,
 };
 
+
 // insert map and call other functions
 function initMap() {
     map = new google.maps.Map(document.getElementById("map"),
@@ -29,7 +30,6 @@ function initMap() {
         zoom: 14,
         zoomControl: true
     });
-
     // loading the packages of graph drawing
     google.charts.load('current', {'packages':['bar']});
     google.charts.load('current', {'packages':['corechart']});
@@ -88,11 +88,13 @@ function station_dropdown() {
     fetch("/static_stations").then(response => {
         return response.json()
     }).then(data => {
-        var station_option_output = "<option value='' disabled selected>-- Please Select --</option>";
+        var station_option_output = "<option value='' disabled selected>-- Please Select The Station --</option>";
         data.forEach(station => {
             station_option_output += "<option value=" + station.number + ">" + station.name + "</option><br>";
         })
         document.getElementById("station_select").innerHTML = station_option_output;
+        document.getElementById("predict_hour").innerHTML =
+            "<option value='' disabled selected>-- Please Select The Day First--</option>";
         document.getElementById("station_select2").innerHTML = station_option_output;
     })
 }
@@ -120,9 +122,6 @@ function display_graph_week(){
     fetch("/availability_data/"+value).then( response => {
         return response.json();
     }).then(data => {
-
-        console.log(data)
-
         var week_data = google.visualization.arrayToDataTable([]);
         week_data.addColumn('string', 'day of week');
         week_data.addColumn('number', 'bikes');
@@ -154,9 +153,6 @@ function display_graph_hourly() {
     fetch("/hourly_data/"+value).then( response => {
         return response.json();
     }).then(data => {
-
-        console.log(data)
-
         var hour_data = google.visualization.arrayToDataTable([]);
         hour_data.addColumn('string', 'time of day');
         hour_data.addColumn('number', 'bikes');
@@ -277,8 +273,6 @@ function forecast(){
         time.setHours(0, 0, 0, 0);
         var today_timestamp = Math.floor(time.getTime() / 1000);
         var a_daytime = 24*60*60;
-        console.log(a_daytime);
-        console.log(today_timestamp);
         var temp_max = 0;
         var temp_min = 1000;
         var main_weather = [];
@@ -327,6 +321,7 @@ function forecast(){
     })
 }
 
+// a function used to convert the string to int for prediction
 function get_weather_value(weather_str) {
     const weatherTypes = ['Clouds', 'Drizzle', 'Rain', 'Clear', 'Snow', 'Mist'];
     const weatherValues = [1, 2, 4, 0, 5, 3];
@@ -335,6 +330,7 @@ function get_weather_value(weather_str) {
     return weatherValues[index];
 }
 
+// predict
 function predict(number, list){
     return fetch('/prediction', {
         method: 'POST',
@@ -348,72 +344,15 @@ function predict(number, list){
     .then(data => data.prediction)
 }
 
-//function prediction_statistic() {
-//    const dropdown = document.getElementById('station_select2');
-//    var value = dropdown.value;
-//    fetch("/forecast").then(response=>{
-//        return response.json();
-//    }).then(data => {
-//
-//        var week_predict_bikes = {};
-//        var week_predict_stands = {}
-//        var count = 0;
-//        data.forEach(each_data => {
-//            var input_feature_list = [each_data.feels_like, each_data.humidity,
-//                each_data.pressure, get_weather_value(each_data.main_weather),
-//                each_data.wind_speed, each_data.day_of_week, each_data.hourly];
-//            var day_of_week = each_data.day_of_week;
-//            if (!(day_of_week in week_predict_bikes)) {
-//                week_predict_bikes[day_of_week] = 0;
-//                week_predict_stands[day_of_week] = 0;
-//            }
-//
-//            predict(value, input_feature_list).then(resultArray => {
-//                week_predict_bikes[day_of_week] += resultArray[0][1];
-//                week_predict_stands[day_of_week] += resultArray[0][0];
-//                    count += 1;
-//                    console.log(count);
-//                    console.log(data.length);
-//                if(count == data.length){
-//                    var week_data = google.visualization.arrayToDataTable([]);
-//                    week_data.addColumn('string', 'day of week');
-//                    week_data.addColumn('number', 'bikes');
-//                    week_data.addColumn('number', 'stands');
-//
-//                    const daysOfWeek_list = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday',
-//                                             'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-//
-//                    const today = new Date();
-//                    const dayOfWeek = today.getDay();
-//
-//                    for (var i = 0; i < 5; i++) {
-//                        if (dayOfWeek == 0) dayOfWeek = 7;
-//                        var temp = dayOfWeek
-//                        if (dayOfWeek + i > 7) temp = dayOfWeek - 7;
-//                        week_data.addRow([getShortDayName(daysOfWeek_list[dayOfWeek + i]),
-//                        week_predict_bikes[temp - 1 + i]/8,
-//                        week_predict_stands[temp - 1 + i]/8]);
-//                    }
-//                    var options = {
-//                        chart: {
-//                            title: 'prediction by dat of week',
-//                            subtitle: 'bikes and stands',
-//                        }
-//                    };
-//                    var chart = new google.charts.Bar(document.getElementById('graph-container2'));
-//                    chart.draw(week_data, google.charts.Bar.convertOptions(options));
-//                }
-//            });
-//        });
-//    });
-//}
-
+// the statistic graph for future 40 hours
 function prediction_statistic() {
+
     const dropdown = document.getElementById('station_select2');
     var value = dropdown.value;
     fetch("/forecast").then(response=>{
         return response.json();
     }).then(data => {
+
         var hourly_predict_bikes = [];
         var hourly_predict_stands = []
         var count = 0;
@@ -426,16 +365,17 @@ function prediction_statistic() {
             const time = parseInt(Date.now());
             if(each_data.dt*1000 >= time) {
                 const date = new Date(each_data.dt*1000);
+
                 date_list.push(date);
                 predict(value, input_feature_list).then(resultArray => {
                     hourly_predict_bikes.push(resultArray[0][1]);
                     hourly_predict_stands.push(resultArray[0][0]);
                     count += 1;
-                    if(count == 40){
+                    if(count >= 39){
                         var hour_data = google.visualization.arrayToDataTable([]);
                         hour_data.addColumn('string', 'hourly');
                         hour_data.addColumn('number', 'predict bikes');
-                        for (var i = 0; i < 40; i++) {
+                        for (var i = 0; i < count; i++) {
                               hour_data.addRow([date_list[i].getDate().toString()+'/'+
                               (date_list[i].getHours()-1).toString()+':00',
                               hourly_predict_bikes[i]]);
@@ -446,7 +386,7 @@ function prediction_statistic() {
                                 subtitle: 'bikes and stands',
                             }
                         };
-                        console.log('work', each_data.dt_txt);
+
                         var chart = new google.charts.Bar(document.getElementById('graph-container2'));
                         chart.draw(hour_data, google.charts.Bar.convertOptions(options));
                     }
@@ -454,4 +394,101 @@ function prediction_statistic() {
             }
         });
     });
+    predict_day_dropdown();
 }
+
+// create the options to dropdown
+function predict_day_dropdown(){
+    document.getElementById("predict_hour").innerHTML =
+    "<option value='' disabled selected>-- Please Select The Day First--</option>";
+
+    var time = new Date();
+    var day = time.getDate();
+    var month = time.getMonth();
+
+    var day_option_output = "<option value='' disabled selected>-- Please Select The Day --</option>";
+        for(var i=0; i< 5; i++){
+            var time_new = new Date(time);
+            time_new.setDate(time.getDate() + i);
+            day_option_output += "<option value=" + (day+i) + ">" +
+            (time_new.getMonth()+1)+'/'+time_new.getDate() + "</option><br>";
+        }
+    document.getElementById("predict_day").innerHTML = day_option_output;
+}
+
+// create the options to dropdown
+function predict_hour_dropdown(){
+    const dropdown = document.getElementById('predict_day');
+    var value = dropdown.value;
+    var time = new Date();
+    var day = time.getDate();
+    var hour = time.getHours();
+
+    var hour_option_output = "<option value='' disabled selected>-- Please Select The Hour --</option>";
+    for(var i=0; i< 24; i++){
+        if (value != day) hour = -1;
+        if (hour < i){
+            hour_option_output += "<option value=" + i + ">" + i + ":00</option><br>";
+        }
+    }
+    document.getElementById("predict_hour").innerHTML = hour_option_output
+}
+
+// predict the bikes and stands when input station and time
+function prediction_result(){
+    const dropdown_station = document.getElementById('station_select2');
+    const dropdown_day = document.getElementById('predict_day');
+    const dropdown_hour = document.getElementById('predict_hour');
+
+    var station_value = dropdown_station.value;
+    var day_value = dropdown_day.value;
+    var hour_value = dropdown_hour.value;
+
+    var time = new Date();
+    var day = time.getDate();
+    var hour = time.getHours();
+
+    var predict_timestamp = Math.floor(time.getTime()/1000) + ((day_value-day)*24 + (hour_value-hour))*3600;
+
+    var time_new = new Date(predict_timestamp * 1000);
+    var day_of_week = time_new.getDay();
+    var hour_of_day = time_new.getHours();
+
+    fetch("/predict_plan/"+predict_timestamp).then( response => {
+        return response.json();
+    }).then(data => {
+        data.forEach(each_data => {
+            var input_feature_list = [each_data.feels_like, get_weather_value(each_data.main_weather),
+                each_data.wind_speed, each_data.humidity, each_data.pressure,
+                day_of_week, hour_of_day];
+
+            predict(station_value, input_feature_list).then(resultArray => {
+                console.log('work');
+                var table_content = "<tr>"
+                  + "<th>Predict Stands: " + resultArray[0][0].toFixed(2) + "</th>"
+                  + "<th>Predict Bikes: " + resultArray[0][1].toFixed(2) + "</th>"
+                  +"</tr>";
+                document.getElementById("predict_table").innerHTML = table_content;
+            });
+        });
+    });
+}
+
+
+//function get_location(){
+//    if(navigator.geolocation) {
+//        navigator.geolocation.getCurrentPosition(show_position, show_error);
+//    } else {
+//        console.log("Geolocation is not supported by this browser.");
+//    }
+//}
+//
+//function show_position(position) {
+//    const userLat = position.coords.latitude;
+//    const userLng = position.coords.longitude;
+//    console.log("Latitude: " + userLat + ", Longitude: " + userLng);
+//}
+//
+//function show_error(error) {
+//    console.log("Error code: " + error.code + ", Message: " + error.message);
+//}
