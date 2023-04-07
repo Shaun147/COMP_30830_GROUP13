@@ -45,9 +45,6 @@ function initSearch() {
   initSearch()
 
 // function to search for station and display marker and info window
-// it will only show the marker user search for
-// if we want to set the future date and time, haven't decided yet how to make it realise its function and beatiful:)
-// maybe 
 function search_station() {
     let search_input = document.getElementById("search_input").value;
   
