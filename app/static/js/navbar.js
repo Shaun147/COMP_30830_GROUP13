@@ -1,5 +1,8 @@
 (function(){
+
 	'use strict'
+
+
 	var siteMenuClone = function() {
 		var jsCloneNavs = document.querySelectorAll('.js-clone-nav');
 		var siteMobileMenuBody = document.querySelector('.site-mobile-menu-body');
@@ -39,7 +42,10 @@
 			});
 
 		}, 1000);
+
+
 		// Click js-menu-toggle
+
 		var menuToggle = document.querySelectorAll(".js-menu-toggle");
 		var mTog;
 		menuToggle.forEach(mtoggle => {
@@ -56,6 +62,8 @@
 				}
 			});
 		})
+
+
 
 		var specifiedElement = document.querySelector(".site-mobile-menu");
 		var mt, mtoggleTemp;
@@ -77,4 +85,6 @@
 
 	}; 
 	siteMenuClone();
+
+
 })()

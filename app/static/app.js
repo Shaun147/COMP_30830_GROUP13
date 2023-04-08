@@ -187,12 +187,12 @@ function display_station_info(marker){
     }).then(data => {
         data.forEach(station => {
             if(station.number == value){
-                var table_content = "<tr>"
-                      + "<th>Name: " + station.name + "</th>"
-                      + "<th>Available Stands: " + station.available_bike_stands + "</th>"
-                      + "<th>Available Bikes: " + station.available_bikes + "</th>"
-                      + "<th>Status: " + station.status + "</th>"
-                      +"</tr>";
+                var table_content = "<tbody>"
+                      + "<tr><th>Name: " + station.name + "</th></tr>"
+                      + "<tr><th>Available Stands: " + station.available_bike_stands + "</th></tr>"
+                      + "<tr><th>Available Bikes: " + station.available_bikes + "</th></tr>"
+                      + "<tr><th>Status: " + station.status + "</th></tr>"
+                      +"</tbody>";
                 document.getElementById("station_table").innerHTML = table_content;
                 if(typeof(marker) == "undefined") {
                     marker = new google.maps.Marker({

@@ -40,8 +40,6 @@ body {
   padding-left: 5px;
   padding-right: 5px;
   margin-left: 30px;
-  background: red;
-  margin-top: 0;
 
 }
 
@@ -91,7 +89,7 @@ h1, h2, h3, h4, h5, h6 {
 
 #map {
   width: 97%;
-  height:65%;
+  height:80%;
   margin-bottom: 20px;
   background:green;
 }
@@ -143,10 +141,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 
-
-
 #bike_station_select {
-  margin-bottom: 20px;
+  padding-left: 0px;
 }
 
 label {
@@ -162,7 +158,7 @@ select {
   border-radius: 5px;
   background-color: #f2f2f2;
 }
-
+/*
 #station_table {
   width: 100%;
   border-collapse: collapse;
@@ -183,7 +179,7 @@ select {
 #station_table td {
   border: 1px solid #ddd;
   padding: 10px;
-}
+}*/
 
 #graph-button, #graph-button2 {
 background-color: blue;
@@ -198,4 +194,8 @@ cursor: pointer;
 width: 600px;
 height: 280px;
 border: 1px solid black;
+}
+
+.col-lg-8 {
+height:
 }
