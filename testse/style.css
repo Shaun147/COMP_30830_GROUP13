@@ -142,10 +142,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 
-
-
 #bike_station_select {
-  margin-bottom: 20px;
+  padding-left: 0px;
 }
 
 label {

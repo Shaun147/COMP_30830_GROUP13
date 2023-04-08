@@ -81,6 +81,12 @@ function search_station() {
       }
     });
   }
+
+// ------------------ new ----------------------
+function scrollToMap() {
+var mapSection = document.getElementById("map-section");
+mapSection.scrollIntoView({ behavior: 'smooth' });
+}
   
   
   
