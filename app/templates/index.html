@@ -30,6 +30,15 @@
 </head>
 <body>
 
+  <div class="site-mobile-menu site-navbar-target">
+    <div class="site-mobile-menu-header">
+      <div class="site-mobile-menu-close">
+        <span class="icofont-close js-menu-toggle"></span>
+      </div>
+    </div>
+    <div class="site-mobile-menu-body"></div>
+  </div>
+
   <nav class="site-nav">
     <div class="container">
       <div class="menu-bg-wrap">
@@ -94,20 +103,20 @@
               type="text"
               class="form-control px-4"
               placeholder="Your start station or destination"
-              id="search_inoput"
+              id="search_input"
             />
+              <button type="submit" class="btn btn-primary" onclick="scrollToMap()">Search</button>
           </form>
-            <button type="submit" class="btn btn-primary" onclick="search_station()">Search</button>
+
           <div id="search-history" class="mt-3">
             <ul id="search-history-list"></ul>
           </div>
         </div>
+
       </div>
     </div>
   </div>
-
-
-  <div class="section" id="map-section">
+  <div class="section pt-0 pb-5" id="map-section">
     <div class="container">
       <div class="row">
         <div class="col-lg-8">
@@ -120,14 +129,13 @@
         </div>
         <div class="col-lg-4">
           <div class="card">
-            <div class="card-body">
-              <!-- <h2 class="card-title">Bike station select</h2> -->
-              <div id="bike_station_select2">
+            <div class="card-body pr-0" id="bike_station_select">
+
                   <label for="station_select">Select a bike station:</label>
-                  <select id="station_select2" onchange="display_station_info()" >
+                  <select id="station_select" onchange="display_station_info()" >
                       <option value ="volvo">Volvo</option>
                   </select>
-              </div>
+
             </div>
           </div>
           <div class="card">
@@ -135,7 +143,7 @@
               <h6 class="card-title">Bike Station Availability</h6>
               <div id="bike-station-availability">
                 <div class="table-responsive">
-                  <table class="table table-striped mb-0">
+                  <table class="table table-striped mb-0" id="station_table">
                     <tbody>
                       <tr><th>Name: null</th></tr>
                       <tr><th>Available Stands: null</th></tr>
@@ -145,25 +153,29 @@
                   </table>
                 </div>
               </div>
+
               </div>
             </div>
             <div class="mt-4 card">
               <div class="card-body p-0">
-                <h6 class="card-title">statistic windows</h6>
+                <h6 class="card-title">Statistic windows</h6>
                 <div class="row align-items-center">
                   <div class="col-lg-6">
                     <p>
                       <a
+
                         target="_blank"
                         class="btn btn-primary text-white py-3 px-4"
                         onclick="display_graph_week()"
                         >Weekly</a
                       >
                     </p>
+
                   </div>
                   <div class="col-lg-6">
                     <p>
                       <a
+
                         target="_blank"
                         class="btn btn-primary text-white py-3 px-4"
                         onclick="display_graph_hourly()"
@@ -172,7 +184,7 @@
                     </p>
                   </div>
                 </div>
-                <div id="graph-container2"></div>
+                <div id="graph-container"></div>
               </div>
             </div>
          </div>
@@ -181,11 +193,10 @@
   </div>
 
 
-
 <div class="section pt-0">
   <div class="row justify-content-center footer-cta" data-aos="fade-up">
     <div class="col-lg-8 mx-auto text-center">
-      <h2 class="mb-4">Weather</h2>
+      <!-- <h2 class="mb-4">Weather</h2> -->
       <div class="row">
         <div class="col-md-2">
           <div id="left_curr">
@@ -270,14 +281,14 @@
                             <a class="dropdown-item" href="#">12</a>
                             </div>
                         </div>
-                      </div>
+                    </div>
                     </div>
                   </div>
               </div>
               <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">Bike avaliable at this station</h4>
-                    <div id="graph-container6"></div>
+                    <div id="graph-container3"></div>
                 </div>
               </div>
           </div>
@@ -286,9 +297,9 @@
             <div class="card">
               <div class="card-body">
                 <!-- <h2 class="card-title">Bike station select</h2> -->
-                <div id="bike_station_select">
+                <div id="bike_station_select4">
                     <label for="station_select">Select a bike station:</label>
-                    <select id="station_select" onchange="display_station_info()" >
+                    <select id="station_select5" onchange="display_station_info()" >
                         <option value ="volvo">Volvo</option>
                     </select>
                 </div>
@@ -297,7 +308,7 @@
           <div class="card">
             <div class="card-body">
               <h3 class="card-title">Predicition Chart</h3>
-              <div id="graph-container3"></div>
+              <div id="graph-container6"></div>
             </div>
           </div>
         </div>
@@ -311,20 +322,41 @@
         <div class="col-md-6">
           <div class="card" >
             <div class="card-body">
-              <div id="graph-container4"></div>
+              <div id="graph-container7"></div>
             </div>
           </div>
         </div>
           <div class="col-md-6">
             <div class="card">
               <div class="card-body">
-                <div id="graph-container"></div>
+                <div id="graph-container8"></div>
               </div>
             </div>
           </div>
       </div>
     </div>
   </div>
+
+  <div class="site-footer">
+    <div class="container">
+
+      <div class="row mt-5">
+        <div class="col-12 text-center">
+
+          <p>
+            Copyright &copy;
+            <script>
+              document.write(new Date().getFullYear());
+            </script>
+            . All Rights Reserved. &mdash; Created by Group13
+          </p>
+
+        </div>
+      </div>
+    </div>
+    <!-- /.container -->
+  </div>
+
 
   <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
