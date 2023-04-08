@@ -33,13 +33,13 @@ function initMap() {
     // loading the packages of graph drawing
     google.charts.load('current', {'packages':['bar']});
     google.charts.load('current', {'packages':['corechart']});
-//    add_marker();
-//    station_dropdown();
+    add_marker();
+    station_dropdown();
     // show the current weather and time each second
-//    setInterval(display_weather, 1000);
-//    forecast();
-//    test();
-//    debounce_on();
+    setInterval(display_weather, 1000);
+    forecast();
+    test();
+    debounce_on();
 }
 
 // add markers to each station and call the info window of station
