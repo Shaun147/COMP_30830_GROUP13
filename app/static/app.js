@@ -4,20 +4,20 @@ let openInfoWindow = null;
 // create 3 different icon for stations
 const  lowIcon= {
     path: "M-1.547 12l6.563-6.609-1.406-1.406-5.156 5.203-2.063-2.109-1.406 1.406zM0 0q2.906 0 4.945 2.039t2.039 4.945q0 1.453-0.727 3.328t-1.758 3.516-2.039 3.070-1.711 2.273l-0.75 0.797q-0.281-0.328-0.75-0.867t-1.688-2.156-2.133-3.141-1.664-3.445-0.75-3.375q0-2.906 2.039-4.945t4.945-2.039z",
-    fillOpacity: 0.8,
-    fillColor: "red",
+    fillOpacity: 1,
+    fillColor: "#cb123f",
     scale: 1.5,
 };
 const  mediumIcon= {
     path: "M-1.547 12l6.563-6.609-1.406-1.406-5.156 5.203-2.063-2.109-1.406 1.406zM0 0q2.906 0 4.945 2.039t2.039 4.945q0 1.453-0.727 3.328t-1.758 3.516-2.039 3.070-1.711 2.273l-0.75 0.797q-0.281-0.328-0.75-0.867t-1.688-2.156-2.133-3.141-1.664-3.445-0.75-3.375q0-2.906 2.039-4.945t4.945-2.039z",
-    fillColor: "blue",
-    fillOpacity: 0.8,
+    fillColor: "#5468fa",
+    fillOpacity: 1,
     scale: 1.5,
 };
 const  highIcon= {
     path: "M-1.547 12l6.563-6.609-1.406-1.406-5.156 5.203-2.063-2.109-1.406 1.406zM0 0q2.906 0 4.945 2.039t2.039 4.945q0 1.453-0.727 3.328t-1.758 3.516-2.039 3.070-1.711 2.273l-0.75 0.797q-0.281-0.328-0.75-0.867t-1.688-2.156-2.133-3.141-1.664-3.445-0.75-3.375q0-2.906 2.039-4.945t4.945-2.039z",
-    fillColor: "green",
-    fillOpacity: 0.8,
+    fillColor: "#77e151",
+    fillOpacity: 1,
     scale: 1.5,
 };
 
@@ -38,8 +38,7 @@ function initMap() {
     // show the current weather and time each second
     setInterval(display_weather, 1000);
     forecast();
-    test();
-    debounce_on();
+    autocomplete_search();
 }
 
 // add markers to each station and call the info window of station
@@ -49,28 +48,31 @@ function add_marker() {
         return response.json();
     }).then(data => {
         data.forEach(station => {
-            var marker = new google.maps.Marker({
-                position: { lat: station.position_lat, lng: station.position_lng },
-                map: map,
-                title: station.address,
-                icon: station.available_bikes <= 10 ? lowIcon :
-                station.available_bikes <= 25 ? mediumIcon : highIcon
-
-            });
-
-            marker.addListener("click", () => {
-                open_infowindow(station, marker);
-                console.log(station.number);
-                document.getElementById("station_select").value = station.number;
-                display_station_info(marker);
-            });
+              create_marker(station);
         });
     });
 }
 
+function create_marker(station) {
+    var marker = new google.maps.Marker({
+        position: { lat: station.position_lat, lng: station.position_lng },
+        map: map,
+        title: station.address,
+        icon: station.available_bikes <= 5 ? lowIcon :
+        station.available_bikes <= 15 ? mediumIcon : highIcon
+
+    });
+
+    marker.addListener("click", () => {
+        open_infowindow(station, marker);
+        document.getElementById("station_select").value = station.number;
+        display_station_info(marker);
+    });
+    return marker;
+}
+
 // use to open the info window
 function open_infowindow(station, marker){
-    console.log("open_infowindow work");
     if (openInfoWindow) {
         openInfoWindow.close();
     }
@@ -95,8 +97,6 @@ function station_dropdown() {
             station_option_output += "<option value=" + station.number + ">" + station.name + "</option><br>";
         })
         document.getElementById("station_select").innerHTML = station_option_output;
-        document.getElementById("predict_hour").innerHTML =
-            "<option value='' disabled selected>-- Please Select The Day First--</option>";
         document.getElementById("station_select2").innerHTML = station_option_output;
     })
 }
@@ -200,16 +200,7 @@ function display_station_info(marker){
                       + "<tr><th>Status: " + station.status + "</th></tr>"
                       +"</tbody>";
                 document.getElementById("station_table").innerHTML = table_content;
-                if(typeof(marker) == "undefined") {
-                    marker = new google.maps.Marker({
-                        position: { lat: station.position_lat, lng: station.position_lng },
-                        map: map,
-                        title: station.address,
-                        icon: station.available_bikes <= 10 ? lowIcon :
-                        station.available_bikes <= 25 ? mediumIcon : highIcon
-                    });
-                }
-                open_infowindow(station, marker);
+                open_infowindow(station, create_marker(station));
             }
         })
 
@@ -360,39 +351,42 @@ function prediction_statistic() {
     fetch("/forecast").then(response=>{
         return response.json();
     }).then(data => {
-
         var hourly_predict_bikes = [];
         var hourly_predict_stands = []
         var count = 0;
+        var statistic_count = 0
         const date_list = [];
+
         data.forEach(each_data => {
+            document.getElementById('graph_title2').innerHTML = "Using Prediction By 3-Hour<br><br>";
+
             var input_feature_list = [each_data.feels_like, get_weather_value(each_data.main_weather),
                 each_data.wind_speed, each_data.humidity, each_data.pressure,
                 each_data.day_of_week, each_data.hourly];
             var day_of_week = each_data.day_of_week;
             const time = parseInt(Date.now());
-            if(each_data.dt*1000 >= time) {
-                const date = new Date(each_data.dt*1000);
 
+            if(each_data.dt*1000 >= time) {
+                statistic_count += 1;
+                const date = new Date(each_data.dt*1000);
                 date_list.push(date);
+
                 predict(value, input_feature_list).then(resultArray => {
                     hourly_predict_bikes.push(resultArray[0][1]);
                     hourly_predict_stands.push(resultArray[0][0]);
                     count += 1;
-                    if(count >= 39){
+
+                    if(count >= statistic_count){
                         var hour_data = google.visualization.arrayToDataTable([]);
                         hour_data.addColumn('string', 'hourly');
                         hour_data.addColumn('number', 'predict bikes');
                         for (var i = 0; i < count; i++) {
-                              hour_data.addRow([date_list[i].getDate().toString()+'/'+
-                              (date_list[i].getHours()-1).toString()+':00',
+                              hour_data.addRow([(date_list[i].getMonth()+1).toString()+'/'+
+                              date_list[i].getDate().toString()+'\n'+
+                              (date_list[i].getHours()).toString()+':00',
                               hourly_predict_bikes[i]]);
                         }
                         var options = {
-                            chart: {
-                                title: 'prediction by hourly',
-                                subtitle: 'bikes and stands',
-                            }
                         };
 
                         var chart = new google.charts.Bar(document.getElementById('graph-container2'));
@@ -471,7 +465,6 @@ function prediction_result(){
                 day_of_week, hour_of_day];
 
             predict(station_value, input_feature_list).then(resultArray => {
-                console.log('work');
                 var table_content = "<tr>"
                   + "<th>Predict Stands: " + resultArray[0][0].toFixed(0) + '~'
                   + (resultArray[0][0]+1).toFixed(0) + "</th>"
@@ -483,112 +476,97 @@ function prediction_result(){
         });
     });
 }
-//*********************************************************test
-function test(){
-    var sites = [];
+
+
+function autocomplete_search(){
+    var list_data = [];
 
     fetch("/static_stations").then(response => {
         return response.json();
     }).then(data => {
         data.forEach(station => {
-            sites.push(station.address)
+            list_data.push(station.address)
         });
     });
 
+    //refer to https://c.runoob.com/codedemo/6190/
     function autocomplete(inp, arr) {
-        /*自动填充函数有两个参数，input 输入框元素和自动填充的数组*/
         var currentFocus;
-        /* 监听 input 输入框，当在 input 输入框元素中时执行以下函数*/
-        inp.addEventListener("input", function(e) {
-            var a, b, i, val = this.value;
-            /*关闭已打开的自动填充列表*/
+        inp.addEventListener("input", function(event) {
+            var input_div, list_div, val = this.value;
+            /*Close the open autofill list*/
              closeAllLists();
             if (!val)  return false;
         currentFocus = -1;
-        /*创建 DIV 元素用于放置自动填充列表的值*/
-        a = document.createElement("div");
-        a.setAttribute("id", this.id + "autocomplete-list");
-        a.setAttribute("class", "autocomplete-items");
-        /*DIV 作为自动填充容器的子元素*/
-        this.parentNode.appendChild(a);
-        /*循环数组*/
-        for (i = 0; i < arr.length; i++) {
-        /*检查填充项是否有与文本字段值相同的内容，不区分大小写*/
-            if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
-            /*为每个匹配元素创建一个 DIV 元素 */
-            b = document.createElement("div");
-            /*匹配项加粗*/
-            b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
-            b.innerHTML += arr[i].substr(val.length);
-            /*选中的填充项插入到隐藏 input 输入字段，用于保存当前选中值*/
-            b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
-            /*当有人点击填充项（DIV 元素）时执行函数*/
-            b.addEventListener("click", function(e) {
-            /*选中的填充项插入到隐藏 input 搜索字段*/
-            inp.value = this.getElementsByTagName("input")[0].value;
+        /*Create the div element to place the value of the autofill list*/
+        input_div = document.createElement("div");
+        input_div.setAttribute("id", this.id + "autocomplete-list");
+        input_div.setAttribute("class", "autocomplete-items");
+        /*DIV acts as a child of the auto-fill container*/
+        this.parentNode.appendChild(input_div);
 
-            closeAllLists();
-          });
-          a.appendChild(b);
+        for (var i = 0; i < arr.length; i++) {
+            if (arr[i].toUpperCase().indexOf(val.toUpperCase()) === 0) {
+            list_div = document.createElement("div");
+            list_div.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+            list_div.innerHTML += arr[i].substr(val.length);
+            list_div.innerHTML += "<input type='hidden' value='" + arr[i].replace(/'/g, '&#39;') + "'>";
+            list_div.addEventListener("click", function() {
+                inp.value = this.getElementsByTagName("input")[0].value;
+                closeAllLists();
+            });
+          input_div.appendChild(list_div);
         }
       }
     });
-    /*按下键盘上的一个键时执行函数*/
-    inp.addEventListener("keydown", function(e) {
-        var x = document.getElementById(this.id + "autocomplete-list");
-        if (x) x = x.getElementsByTagName("div");
-        if (e.keyCode == 40) {
-        /*如果按下箭头向下键，currentFocus 变量加 1，即向下移动一位*/
+
+    inp.addEventListener("keydown", function(event) {
+        var auto_list = document.getElementById(this.id + "autocomplete-list");
+        if (auto_list) auto_list = auto_list.getElementsByTagName("div");
+        if (event.keyCode == 40) {
         currentFocus++;
-        /*使当前选中项更醒目*/
-        addActive(x);
-      } else if (e.keyCode == 38) { //up
-        /*按下箭头向上键，选中列表项向上移动一位*/
+        addActive(auto_list);
+      } else if (event.keyCode == 38) {
         currentFocus--;
-        /*使当前选中项更醒目*/
-        addActive(x);
-      } else if (e.keyCode == 13) {
-        /*如果按下 ENTER 键，阻止提交，你也可以设置 submit 提交*/
-        e.preventDefault();
+        addActive(auto_list);
+      } else if (event.keyCode == 13) {
+        event.preventDefault();
         if (currentFocus > -1) {
-          /*模拟点击选中项*/
-          if (x) x[currentFocus].click();
+          if (auto_list) auto_list[currentFocus].click();
         }
       }
     });
-    function addActive(x) {
-        /*设置选中的选项函数*/
-        if (!x) return false;
-        /*移动选项设置不同选中选项的背景颜色*/
-        removeActive(x);
-        if (currentFocus >= x.length) currentFocus = 0;
-        if (currentFocus < 0) currentFocus = (x.length - 1);
-        /*添加 "autocomplete-active" 类*/
-     x[currentFocus].classList.add("autocomplete-active");
+    function addActive(option) {
+        if (!option) return false;
+        removeActive(option);
+        if (currentFocus >= option.length) currentFocus = 0;
+        if (currentFocus < 0) currentFocus = (option.length - 1);
+        option[currentFocus].classList.add("autocomplete-active");
     }
-    function removeActive(x) {
-     /*移除没有选中选项的 "autocomplete-active" 类*/
-    for (var i = 0; i < x.length; i++) {
-        x[i].classList.remove("autocomplete-active");
+    function removeActive(option) {
+     /*Remove options that are not selected "autocomplete-active" class*/
+    for (var i = 0; i < option.length; i++) {
+        option[i].classList.remove("autocomplete-active");
         }
     }
-    function closeAllLists(elmnt) {
-        /*关闭自动添加列表*/
-        var x = document.getElementsByClassName("autocomplete-items");
-        for (var i = 0; i < x.length; i++) {
-            if (elmnt != x[i] && elmnt != inp) {
-                x[i].parentNode.removeChild(x[i]);
+    function closeAllLists(element) {
+        /*Disable automatic list adding*/
+        var items = document.getElementsByClassName("autocomplete-items");
+        for (var i = 0; i < items.length; i++) {
+            if (element != items[i] && element != inp) {
+                items[i].parentNode.removeChild(items[i]);
             }
         }
     }
-    /*点击 HTML 文档任意位置关闭填充列表*/
-    document.addEventListener("click", function (e) {
-        closeAllLists(e.target);
-        });
+    /*Click anywhere in the HTML document to close the fill list*/
+    document.addEventListener("click", function (event) {
+            closeAllLists(event.target);
+    });
     }
 
-    autocomplete(document.getElementById("myInput"), sites);
+    autocomplete(document.getElementById("myInput"), list_data);
 }
+
 
 function search_station(){
     const form = document.getElementById('search-form');
@@ -601,7 +579,6 @@ function search_station(){
 
             data.forEach(station => {
                 if(station.address == input) {
-                    console.log('li')
                     document.getElementById("station_select").value = station.number;
                     display_station_info();
                     var element = document.getElementById('card_title_map');
@@ -620,22 +597,22 @@ function search_station(){
     }
 }
 
-function debounce(func, delay) {
-    let timeoutId;
-    return function(...args) {
-        clearTimeout(timeoutId);
-        timeoutId = setTimeout(() => {
-            func.apply(this, args);
-        }, delay);
-    };
-}
-
-function debounce_on(){
-    const debouncedSearch = debounce(test, 500);
-    document.querySelector('#graph-container').addEventListener('input', event => {
-        debouncedSearch(event.target.value);
-    });
-}
+//function debounce(func, delay) {
+//    let timeoutId;
+//    return function(...args) {
+//        clearTimeout(timeoutId);
+//        timeoutId = setTimeout(() => {
+//            func.apply(this, args);
+//        }, delay);
+//    };
+//}
+//
+//function debounce_on(){
+//    const debouncedSearch = debounce(test, 500);
+//    document.querySelector('#graph-container').addEventListener('input', event => {
+//        debouncedSearch(event.target.value);
+//    });
+//}
 
 
 //*********************************************************test
