@@ -32,7 +32,6 @@ def create_table():
 def write_to_db_future_weather(text):
     whole_data = json.loads(text)
     for each in whole_data['list']:
-        print(each)
         data_vals = (
             str(each['dt']),
             str(each['dt_txt']),
