@@ -118,7 +118,6 @@ def is_exist_avail(list):
     cur.execute(sql)
     rs = cur.fetchall()
     if rs == ():
-        print("none")
         return True
     print("is exist")
     return False

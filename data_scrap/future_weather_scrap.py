@@ -1,7 +1,6 @@
 import json
 import db_info
 import pandas as pd
-import pickle
 
 db = db_info.db_info()
 cur = db.cursor()
