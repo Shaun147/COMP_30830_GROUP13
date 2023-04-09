@@ -299,10 +299,7 @@ input[type=submit] {
 #card_title_map{
     text-align:center;
 }
-.col-lg-6 .py3{
-    padding-top: 0.5rem !important;
-    padding-bottom: 0.5rem !important;
-}
+
 #weather_box {
 
 }

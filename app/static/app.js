@@ -117,13 +117,13 @@ function getShortDayName(dayName) {
 
 // use to show the graph of everyday using
 function display_graph_week(){
-    document.getElementById('graph_title').innerHTML = "Using Condition Statistic By Day<br><br>";
     const dropdown = document.getElementById('station_select');
     var value = dropdown.value;
 
     fetch("/availability_data/"+value).then( response => {
         return response.json();
     }).then(data => {
+        document.getElementById('graph_title').innerHTML = "Using Condition Statistic By Day<br><br>";
         var week_data = google.visualization.arrayToDataTable([]);
         week_data.addColumn('string', 'day of week');
         week_data.addColumn('number', 'Available Bikes');
@@ -148,13 +148,13 @@ function display_graph_week(){
 
 // use to show the graph of hourly using
 function display_graph_hourly() {
-    document.getElementById('graph_title').innerHTML = "Using Condition Statistic By Hour<br><br>";
     const dropdown = document.getElementById('station_select');
     var value = dropdown.value;
 
     fetch("/hourly_data/"+value).then( response => {
         return response.json();
     }).then(data => {
+        document.getElementById('graph_title').innerHTML = "Using Condition Statistic By Hour<br><br>";
         var hour_data = google.visualization.arrayToDataTable([]);
         hour_data.addColumn('string', 'time of day');
         hour_data.addColumn('number', 'Available Bikes');
