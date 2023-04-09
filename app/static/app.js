@@ -64,9 +64,8 @@ function create_marker(station) {
     });
 
     marker.addListener("click", () => {
-        open_infowindow(station, marker);
         document.getElementById("station_select").value = station.number;
-        display_station_info(marker);
+        display_station_info();
     });
     return marker;
 }
@@ -78,7 +77,7 @@ function open_infowindow(station, marker){
     }
 
     const infowindow = new google.maps.InfoWindow();
-    infowindow.setContent("<h2>" + station.name + "</h2>"
+    infowindow.setContent("<h3>" + station.name + "</h3>"
         + "<p><b>Available Bikes: </b>" + station.available_bikes + "</p>"
         + "<p><b>Available Stands: </b>" + station.available_bike_stands + "</p>"
         + "<p><b>Status: </b>" + station.status + "</p>");
@@ -126,23 +125,28 @@ function display_graph_week(){
         document.getElementById('graph_title').innerHTML = "Using Condition Statistic By Day<br><br>";
         var week_data = google.visualization.arrayToDataTable([]);
         week_data.addColumn('string', 'day of week');
-        week_data.addColumn('number', 'Available Bikes');
-        week_data.addColumn('number', 'Available Stands');
-        week_data.addColumn('number', 'All Places');
+        week_data.addColumn('number', 'Bikes');
+        week_data.addColumn('number', 'Stands');
 
         data.forEach(day => {
             const all_places = day.avg_bikes + day.avg_stands;
-            week_data.addRow([getShortDayName(day.day_name), day.avg_bikes, day.avg_stands, all_places]);
+            week_data.addRow([getShortDayName(day.day_name), day.avg_bikes, day.avg_stands]);
         });
 
         var options = {
-            colors: ['#a9f0f5', '#8e9096', '#f5a074'],
-            width: 450,
-            height: 250
+            legend: { position: 'bottom' },
+            colors: ['#a9f0f5', '#f5a074'],
+            width:550,
+            height: 250,
+            chartArea: {
+                    right: '30%',
+                    top:'10%',
+                },
+
         };
 
-        var chart = new google.charts.Bar(document.getElementById('graph-container'));
-        chart.draw(week_data, google.charts.Bar.convertOptions(options));
+        var chart = new google.visualization.ColumnChart(document.getElementById('graph-container'));
+        chart.draw(week_data, options);
     });
 }
 
@@ -159,7 +163,7 @@ function display_graph_hourly() {
         hour_data.addColumn('string', 'time of day');
         hour_data.addColumn('number', 'Available Bikes');
         hour_data.addColumn('number', 'Available Stands');
-        hour_data.addColumn('number', 'All Places');
+        hour_data.addColumn('number', 'All');
 
         data.forEach(day => {
             const all_places = day.avg_bikes + day.avg_stands;
@@ -169,7 +173,7 @@ function display_graph_hourly() {
         var options = {
             legend: { position: 'bottom' },
             colors: ['#a9f0f5', '#f5a074', '#8e9096'],
-            width:500,
+            width:550,
             height: 250,
             chartArea: {
                     right: '30%',
@@ -184,7 +188,7 @@ function display_graph_hourly() {
 
 // use to show the available information
 // when showing available information, statistic graph showing
-function display_station_info(marker){
+function display_station_info(){
     const dropdown = document.getElementById('station_select');
     var value = dropdown.value;
 
@@ -194,10 +198,10 @@ function display_station_info(marker){
         data.forEach(station => {
             if(station.number == value){
                 var table_content = "<tbody>"
-                      + "<tr><th>Name: " + station.name + "</th></tr>"
-                      + "<tr><th>Available Stands: " + station.available_bike_stands + "</th></tr>"
-                      + "<tr><th>Available Bikes: " + station.available_bikes + "</th></tr>"
-                      + "<tr><th>Status: " + station.status + "</th></tr>"
+                      + "<tr><th>Name: </th><th class='text_right'>" + station.name + "</th></tr>"
+                      + "<tr><th>Available Stands: </th><th class='text_right'>" + station.available_bike_stands + "</th></tr>"
+                      + "<tr><th>Available Bikes: </th><th class='text_right'>" + station.available_bikes + "</th></tr>"
+                      + "<tr><th>Status: </th><th class='text_right'>" + station.status + "</th></tr>"
                       +"</tbody>";
                 document.getElementById("station_table").innerHTML = table_content;
                 open_infowindow(station, create_marker(station));
@@ -298,6 +302,7 @@ function forecast(){
                 }
 
                 if(tempt_value != i_day){
+                    console.log(tempt_value, i_day)
                     var date = new Date((datetime.dt - a_daytime) * 1000);
                     li_content += "<li class='future_weather'>"
                     + "<img class='weather_icon'src='https://openweathermap.org/img/wn/"
@@ -307,7 +312,6 @@ function forecast(){
                     + "MIN-TEMP:"+(temp_min-274)+ "°C" + "<br>MAX-TEMP:" + (temp_max-274)+ "°C" + "<br>DATE:"
                     + date.getDate() +"/"+ (date.getMonth()+1);
                     + "</li>"
-
                     tempt_value = tempt_value + 1;
                     temp_max = 0;
                     temp_min = 1000;
@@ -358,7 +362,7 @@ function prediction_statistic() {
         const date_list = [];
 
         data.forEach(each_data => {
-            document.getElementById('graph_title2').innerHTML = "Using Prediction By 3-Hour<br><br>";
+            document.getElementById('graph_title2').innerHTML = "Using Prediction By Every 3-Hour<br><br>";
 
             var input_feature_list = [each_data.feels_like, get_weather_value(each_data.main_weather),
                 each_data.wind_speed, each_data.humidity, each_data.pressure,
@@ -375,7 +379,6 @@ function prediction_statistic() {
                     hourly_predict_bikes.push(resultArray[0][1]);
                     hourly_predict_stands.push(resultArray[0][0]);
                     count += 1;
-
                     if(count >= statistic_count){
                         var hour_data = google.visualization.arrayToDataTable([]);
                         hour_data.addColumn('string', 'hourly');
@@ -389,8 +392,8 @@ function prediction_statistic() {
                         var options = {
                         };
 
-                        var chart = new google.charts.Bar(document.getElementById('graph-container2'));
-                        chart.draw(hour_data, google.charts.Bar.convertOptions(options));
+                        var chart = new google.visualization.ColumnChart(document.getElementById('graph-container2'));
+                        chart.draw(hour_data, options);
                     }
                 });
             }
@@ -401,8 +404,9 @@ function prediction_statistic() {
 
 // create the options to dropdown
 function predict_day_dropdown(){
-    document.getElementById("predict_hour").innerHTML =
-    "<option value='' disabled selected>-- Please Select The Day First--</option>";
+    var temp_string = "<option value='' disabled selected>-- Please Select The Day First--</option>";
+    document.getElementById("predict_hour").innerHTML = temp_string;
+
 
     var time = new Date();
     var day = time.getDate();
@@ -592,7 +596,6 @@ function search_station(){
                 document.getElementById('myInput').placeholder = "Please Enter Right Station Name";
                 document.getElementById('myInput').value = "";
             }
-
         });
     }
 }
