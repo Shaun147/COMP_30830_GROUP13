@@ -117,7 +117,7 @@ function getShortDayName(dayName) {
 
 // use to show the graph of everyday using
 function display_graph_week(){
-    document.getElementById('graph_title').innerHTML = "Using Condition Statistic By Day";
+    document.getElementById('graph_title').innerHTML = "Using Condition Statistic By Day<br><br>";
     const dropdown = document.getElementById('station_select');
     var value = dropdown.value;
 
@@ -126,9 +126,9 @@ function display_graph_week(){
     }).then(data => {
         var week_data = google.visualization.arrayToDataTable([]);
         week_data.addColumn('string', 'day of week');
-        week_data.addColumn('number', 'bikes');
-        week_data.addColumn('number', 'stands');
-        week_data.addColumn('number', 'all places');
+        week_data.addColumn('number', 'Available Bikes');
+        week_data.addColumn('number', 'Available Stands');
+        week_data.addColumn('number', 'All Places');
 
         data.forEach(day => {
             const all_places = day.avg_bikes + day.avg_stands;
@@ -137,7 +137,8 @@ function display_graph_week(){
 
         var options = {
             colors: ['#a9f0f5', '#8e9096', '#f5a074'],
-            width: 450
+            width: 450,
+            height: 250
         };
 
         var chart = new google.charts.Bar(document.getElementById('graph-container'));
@@ -147,7 +148,7 @@ function display_graph_week(){
 
 // use to show the graph of hourly using
 function display_graph_hourly() {
-    document.getElementById('graph_title').innerHTML = "Using Condition Statistic By Hour";
+    document.getElementById('graph_title').innerHTML = "Using Condition Statistic By Hour<br><br>";
     const dropdown = document.getElementById('station_select');
     var value = dropdown.value;
 
@@ -156,9 +157,9 @@ function display_graph_hourly() {
     }).then(data => {
         var hour_data = google.visualization.arrayToDataTable([]);
         hour_data.addColumn('string', 'time of day');
-        hour_data.addColumn('number', 'bikes');
-        hour_data.addColumn('number', 'stands');
-        hour_data.addColumn('number', 'all places');
+        hour_data.addColumn('number', 'Available Bikes');
+        hour_data.addColumn('number', 'Available Stands');
+        hour_data.addColumn('number', 'All Places');
 
         data.forEach(day => {
             const all_places = day.avg_bikes + day.avg_stands;
@@ -169,6 +170,7 @@ function display_graph_hourly() {
             legend: { position: 'bottom' },
             colors: ['#a9f0f5', '#f5a074', '#8e9096'],
             width:500,
+            height: 250,
             chartArea: {
                     right: '30%',
                     top:'10%',
@@ -224,7 +226,7 @@ function now_time(){
     var hour = time.getHours();
     var minutes = time.getMinutes().toString().padStart(2, '0');
     var seconds = time.getSeconds().toString().padStart(2, '0');
-    var rs = "time: "+year+"/"+month+"/"+day+" "+hour+":"+minutes+":"+seconds;
+    var rs = "PRESENT TIME: "+day+"/"+month+"/"+ year+" "+hour+":"+minutes+":"+seconds;
     return rs;
 }
 
@@ -311,8 +313,8 @@ function forecast(){
                     + main_weather_info(main_weather_icon)
                     + "@2x.png' alt='Weather icon'><br>"
                     + main_weather_info(main_weather) + "<br>"
-                    + "min:"+(temp_min-274) + "<br>max:" + (temp_max-274) + "<br>"
-                    + (date.getMonth()+1) +"/"+ date.getDate();
+                    + "MIN-TEMP:"+(temp_min-274)+ "°C" + "<br>MAX-TEMP:" + (temp_max-274)+ "°C" + "<br>DATE:"
+                    + date.getDate() +"/"+ (date.getMonth()+1);
                     + "</li>"
 
                     tempt_value = tempt_value + 1;

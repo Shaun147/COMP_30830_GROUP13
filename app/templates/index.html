@@ -48,7 +48,7 @@
           <ul
             class="js-clone-nav d-none d-lg-inline-block text-start site-menu float-end">
             <li class="active"><a href="">Home</a></li>
-            <li><a href="#map-section">Map</a></li>
+            <li><a href="#card_title_map">Map</a></li>
             <li class="has-children">
               <a href="#plan-trip">Plan your trip</a>
               <ul class="dropdown">
@@ -128,7 +128,7 @@
   </div>
   <div class="section pt-0 pb-5" id="map-section">
     <div class="container">
-      <div class="row">
+      <div class="row" id="row_map">
         <div class="col-lg-8">
             <div class="card">
             <div class="card-body">
@@ -175,7 +175,7 @@
                       <a
 
                         target="_blank"
-                        class="btn btn-primary text-white py-3 px-4"
+                        class="btn btn-primary text-white py-2 px-4"
                         onclick="display_graph_week()"
                         >Weekly</a
                       >
@@ -185,12 +185,10 @@
                   <div class="col-lg-6">
                     <p>
                       <a
-
                         target="_blank"
-                        class="btn btn-primary text-white py-3 px-4"
+                        class="btn btn-primary text-white py-2 px-4"
                         onclick="display_graph_hourly()"
-                        >Hourly</a
-                      >
+                        >Hourly</a>
                     </p>
                   </div>
                 </div>
@@ -204,11 +202,11 @@
   </div>
 
 
-<div class="section pt-0">
+<div class="section pt-0" id="weather_box">
   <div class="row justify-content-center footer-cta" data-aos="fade-up">
     <div class="col-lg-8 mx-auto text-center">
       <!-- <h2 class="mb-4">Weather</h2> -->
-      <div class="row">
+      <div class="row" id="row_weather">
         <div class="col-md-2">
           <div id="left_curr">
             <img id="curr-weather-icon" src="https://openweathermap.org/img/wn/10d@2x.png" alt="Weather icon">

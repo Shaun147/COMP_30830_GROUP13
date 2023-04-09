@@ -264,13 +264,49 @@ input[type=submit] {
     font-size: 15px;
     font-weight: bold;
     font-family: 'Courier New', Courier, monospace;
+    position:relative;
+    left:5%;
 }
 
 #left_curr{
     width:150%;
     position:relative;
     top:-60px;
+    right:30%;
+
 }
 #left_curr img{
     width:170px;
 }
+
+#right_future{
+    overflow: auto;
+}
+
+#time_detail {
+    font-size: 15px;
+    font-weight: bold;
+}
+#weather_description{
+    font-size: 17px;
+    font-weight: bold;
+}
+#row_weather {
+    position:relative;
+    left:5%;
+}
+
+#card_title_map{
+    text-align:center;
+}
+.col-lg-6 .py3{
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+}
+#weather_box {
+
+}
+
+
+
+
