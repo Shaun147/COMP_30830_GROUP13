@@ -117,7 +117,7 @@ function getShortDayName(dayName) {
 
 // use to show the graph of everyday using
 function display_graph_week(){
-
+    document.getElementById('graph_title').innerHTML = "Using Condition Statistic By Day";
     const dropdown = document.getElementById('station_select');
     var value = dropdown.value;
 
@@ -136,10 +136,8 @@ function display_graph_week(){
         });
 
         var options = {
-          chart: {
-            title: 'using condition of selected station',
-            subtitle: 'bikes and stands',
-          }
+            colors: ['#a9f0f5', '#8e9096', '#f5a074'],
+            width: 450
         };
 
         var chart = new google.charts.Bar(document.getElementById('graph-container'));
@@ -149,6 +147,7 @@ function display_graph_week(){
 
 // use to show the graph of hourly using
 function display_graph_hourly() {
+    document.getElementById('graph_title').innerHTML = "Using Condition Statistic By Hour";
     const dropdown = document.getElementById('station_select');
     var value = dropdown.value;
 
@@ -167,8 +166,13 @@ function display_graph_hourly() {
         });
 
         var options = {
-          title: 'using condition of selected station',
-          legend: { position: 'bottom' }
+            legend: { position: 'bottom' },
+            colors: ['#a9f0f5', '#f5a074', '#8e9096'],
+            width:500,
+            chartArea: {
+                    right: '30%',
+                    top:'10%',
+                },
         };
 
         var chart = new google.visualization.LineChart(document.getElementById('graph-container'));
@@ -520,7 +524,7 @@ function test(){
             b.addEventListener("click", function(e) {
             /*选中的填充项插入到隐藏 input 搜索字段*/
             inp.value = this.getElementsByTagName("input")[0].value;
-            /*关闭自动填充列表*/
+
             closeAllLists();
           });
           a.appendChild(b);
@@ -586,9 +590,8 @@ function test(){
 
 function search_station(){
     const form = document.getElementById('search-form');
-
-    const input = document.getElementById('myInput').value;
-
+    var input = document.getElementById('myInput').value;
+    var input_right_flag = 1;
     if (input !== '') {
         fetch("/static_stations").then(response => {
             return response.json();
@@ -599,8 +602,18 @@ function search_station(){
                     console.log('li')
                     document.getElementById("station_select").value = station.number;
                     display_station_info();
+                    var element = document.getElementById('card_title_map');
+                    element.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
+                    input_right_flag = 0;
+                    document.getElementById('myInput').value = "";
+                    document.getElementById('myInput').placeholder = "Enter Station Name";
                 }
             });
+            if(input_right_flag == 1){
+                document.getElementById('myInput').placeholder = "Please Enter Right Station Name";
+                document.getElementById('myInput').value = "";
+            }
+
         });
     }
 }
@@ -624,6 +637,11 @@ function debounce_on(){
 
 
 //*********************************************************test
+
+function scroll_to_map() {
+  var element = document.getElementById('card_title_map');
+  element.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
+}
 
 
 //function get_location(){

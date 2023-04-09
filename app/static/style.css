@@ -191,11 +191,86 @@ cursor: pointer;
 }
 
 #graph-container {
-width: 600px;
+width: 100%;
 height: 280px;
-border: 1px solid black;
 }
 
 .col-lg-8 {
-height:
+    min-height: 500px;
+}
+
+.autocomplete {
+  /*容器定位设置为 relative:*/
+  position: relative;
+  display: inline-block;
+}
+input {
+  border: 1px solid transparent;
+  background-color: #f1f1f1;
+  padding: 10px;
+  font-size: 16px;
+}
+input[type=text] {
+  background-color: #f1f1f1;
+  width: 100%;
+}
+input[type=submit] {
+  background-color: DodgerBlue;
+  color: #fff;
+}
+.autocomplete {
+    width:100%
+}
+#search-form {
+    position: absolute;
+    left: 20%;
+    width: 45%;
+}
+.autocomplete-items {
+  position: absolute;
+  border: 1px solid #d4d4d4;
+  border-bottom: none;
+  border-top: none;
+  z-index: 99;
+  /*设置自动填充项宽度与容器相同*/
+  top: 100%;
+  left: 15%;
+  right: 0;
+  width:70%;
+}
+.autocomplete-items div {
+  padding: 10px;
+  cursor: pointer;
+  background-color: #fff;
+  border-bottom: 1px solid #d4d4d4;
+}
+.autocomplete-items div:hover {
+  /*鼠标移动到填充项设置的背景颜色*/
+  background-color: #e9e9e9;
+}
+.autocomplete-active {
+  /*使用箭头键浏览填充项时的背景颜色*/
+  background-color: #005555 !important;
+  color: white;
+
+}
+#search_button {
+    position:relative;
+    left:30%;
+}
+
+#graph_title {
+    color: gray;
+    font-size: 15px;
+    font-weight: bold;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+#left_curr{
+    width:150%;
+    position:relative;
+    top:-60px;
+}
+#left_curr img{
+    width:170px;
 }
