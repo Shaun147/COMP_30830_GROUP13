@@ -22,12 +22,15 @@ RESOURCE_FUTURE_WEATHER = requests.get(future_weather_URL, params=parameters)
 
 
 def run_5m():
+    RESOURCE = requests.get("https://api.jcdecaux.com/vls/v1/stations?contract=Dublin&apiKey=%s" % APIKEY)
+    RESOURCE_WEATHER = requests.get(weather_URL, params=parameters)
     weather_scrap.write_to_db_weather(RESOURCE_WEATHER.text)
     bike_scrap.write_to_db_availability(RESOURCE.text)
-    scheduler.enter(10, 1, run_5m)
+    scheduler.enter(300, 1, run_5m)
 
 
 def run_1h():
+    RESOURCE_FUTURE_WEATHER = requests.get(future_weather_URL, params=parameters)
     future_weather_scrap.write_to_db_future_weather(RESOURCE_FUTURE_WEATHER.text)
     update_pkl.update()
     scheduler.enter(3600, 1, run_1h)
