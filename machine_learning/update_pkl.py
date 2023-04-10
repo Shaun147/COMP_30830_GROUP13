@@ -109,5 +109,7 @@ def update():
         with open('station_' + str(i) + '.pkl', 'wb') as handle:
             pickle.dump(rf_list[i], handle, pickle.HIGHEST_PROTOCOL)
 
+    print(mse_sum / len(df_whole['number'].unique()))
+
 update()
 
