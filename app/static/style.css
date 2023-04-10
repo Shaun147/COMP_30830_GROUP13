@@ -165,8 +165,9 @@ cursor: pointer;
 }
 
 #graph-container {
-width: 100%;
-height: 270px;
+    max-width:500px;
+    width: 100%;
+    height: 270px;
 }
 
 .col-lg-8 {
@@ -296,4 +297,10 @@ input[type=submit] {
 }
 .card {
     text-align:center;
+}
+
+.dropdown_50{
+    width: 80%;
+    position:relative;
+    left:10%;
 }

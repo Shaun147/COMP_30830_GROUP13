@@ -13,17 +13,17 @@ NAME = "Dublin"
 STATIONS = "https://api.jcdecaux.com/vls/v1/stations"
 APIKEY = "8baeb25cfb9a5eb1f76dec99338e19bcd20e4386"
 
-# USER = "group13"
-# PASSWORD = "123456789"
-# HOST = "dublinbikegroup13.c1msfserw61n.us-east-1.rds.amazonaws.com"
-# PORT = 3306
-# DATABASE = "dbbike13"
-
-HOST = "127.0.0.1"
-USER = "root"
+USER = "group13"
+PASSWORD = "123456789"
+HOST = "dublinbikegroup13.c1msfserw61n.us-east-1.rds.amazonaws.com"
 PORT = 3306
 DATABASE = "dbbike13"
-PASSWORD = "qweqweqwe"
+
+# HOST = "127.0.0.1"
+# USER = "root"
+# PORT = 3306
+# DATABASE = "dbbike13"
+# PASSWORD = "qweqweqwe"
 
 engine = create_engine("mysql+pymysql://{}:{}@{}:{}/{}".format(USER, PASSWORD, HOST, PORT, DATABASE), echo=True)
 

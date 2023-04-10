@@ -36,9 +36,10 @@ function initMap() {
     add_marker();
     station_dropdown();
     // show the current weather and time each second
-    setInterval(display_weather, 1000);
+    setInterval(display_weather, 500);
     forecast();
     autocomplete_search();
+    debounce_on();
 }
 
 // add markers to each station and call the info window of station
@@ -136,10 +137,10 @@ function display_graph_week(){
         var options = {
             legend: { position: 'bottom' },
             colors: ['#a9f0f5', '#f5a074'],
-            width:550,
+            width:500,
             height: 250,
             chartArea: {
-                    right: '30%',
+                    right: '40%',
                     top:'10%',
                 },
 
@@ -173,12 +174,8 @@ function display_graph_hourly() {
         var options = {
             legend: { position: 'bottom' },
             colors: ['#a9f0f5', '#f5a074', '#8e9096'],
-            width:550,
-            height: 250,
-            chartArea: {
-                    right: '30%',
-                    top:'10%',
-                },
+            width:500,
+            height: 250
         };
 
         var chart = new google.visualization.LineChart(document.getElementById('graph-container'));
@@ -404,6 +401,7 @@ function prediction_statistic() {
 
 // create the options to dropdown
 function predict_day_dropdown(){
+    console.log('count');
     var temp_string = "<option value='' disabled selected>-- Please Select The Day First--</option>";
     document.getElementById("predict_hour").innerHTML = temp_string;
 
@@ -411,9 +409,11 @@ function predict_day_dropdown(){
     var time = new Date();
     var day = time.getDate();
     var month = time.getMonth();
+    var hour = time.getHours();
 
     var day_option_output = "<option value='' disabled selected>-- Please Select The Day --</option>";
         for(var i=0; i< 5; i++){
+            if(hour == 23 && i == 0) i++;
             var time_new = new Date(time);
             time_new.setDate(time.getDate() + i);
             day_option_output += "<option value=" + (day+i) + ">" +
@@ -600,22 +600,22 @@ function search_station(){
     }
 }
 
-//function debounce(func, delay) {
-//    let timeoutId;
-//    return function(...args) {
-//        clearTimeout(timeoutId);
-//        timeoutId = setTimeout(() => {
-//            func.apply(this, args);
-//        }, delay);
-//    };
-//}
-//
-//function debounce_on(){
-//    const debouncedSearch = debounce(test, 500);
-//    document.querySelector('#graph-container').addEventListener('input', event => {
-//        debouncedSearch(event.target.value);
-//    });
-//}
+function debounce(func, delay) {
+    let timeoutId;
+    return function(...args) {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+            func.apply(this, args);
+        }, delay);
+    };
+}
+
+function debounce_on(){
+    const debouncedSearch = debounce(predict_day_dropdown, 100);
+    document.querySelector('#graph-container').addEventListener('input', event => {
+        debouncedSearch(event.target.value);
+    });
+}
 
 
 //*********************************************************test
