@@ -4,6 +4,7 @@ import sched
 import future_weather_scrap
 import bike_scrap
 import weather_scrap
+import machine_learning
 
 NAME = "Dublin"
 STATIONS = "https://api.jcdecaux.com/vls/v1/stations"
