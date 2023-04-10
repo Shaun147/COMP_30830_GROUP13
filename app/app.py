@@ -121,7 +121,7 @@ def prediction():
     number = data['number']
     input_features = data['input_features']
 
-    with open(f'../machine learning/station_{number}.pkl', 'rb') as f:
+    with open(f'../machine_learning/station_{number}.pkl', 'rb') as f:
         rf = pickle.load(f)
 
     prediction = rf.predict([input_features]).tolist()
