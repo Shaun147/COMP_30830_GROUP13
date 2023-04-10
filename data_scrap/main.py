@@ -4,6 +4,7 @@ import sched
 import future_weather_scrap
 import bike_scrap
 import weather_scrap
+import machine_learning.update_pkl
 
 
 NAME = "Dublin"
@@ -27,15 +28,16 @@ def run_5m():
     scheduler.enter(300, 1, run_5m)
 
 
-def run_3h():
+def run_1h():
     future_weather_scrap.write_to_db_future_weather(RESOURCE_FUTURE_WEATHER.text)
-    scheduler.enter(10800, 1, run_3h)
+    machine_learning.update_pkl.update()
+    scheduler.enter(3600, 1, run_1h)
 
 
 scheduler = sched.scheduler(time.time, time.sleep)
 
 scheduler.enter(0, 1, run_5m)
-scheduler.enter(0, 1, run_3h)
+scheduler.enter(0, 1, run_1h)
 scheduler.run()
 
 
