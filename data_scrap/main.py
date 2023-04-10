@@ -24,7 +24,7 @@ RESOURCE_FUTURE_WEATHER = requests.get(future_weather_URL, params=parameters)
 def run_5m():
     weather_scrap.write_to_db_weather(RESOURCE_WEATHER.text)
     bike_scrap.write_to_db_availability(RESOURCE.text)
-    scheduler.enter(300, 1, run_5m)
+    scheduler.enter(10, 1, run_5m)
 
 
 def run_1h():
@@ -35,7 +35,7 @@ def run_1h():
 
 scheduler = sched.scheduler(time.time, time.sleep)
 
-scheduler.enter(0, 1, run_5m)
+scheduler.enter(0, 1, run_1h)
 scheduler.enter(0, 1, run_1h)
 scheduler.run()
 
