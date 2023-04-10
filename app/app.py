@@ -1,12 +1,11 @@
-import json
+
 import pickle
-from datetime import datetime
+
 
 from flask import request, jsonify
 from sqlalchemy import *
 import flask
 import pandas as pd
-import sklearn
 
 app = flask.Flask(__name__)
 NAME = "Dublin"
