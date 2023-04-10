@@ -267,69 +267,77 @@
 </div>
 
   <div class="section" id="plan-trip">
-    <div class="container">
-      <div class="row">  
-        <div class="col-lg-6">
-          <div class="card">
-              <div class="card-body">
-                  <h4 class="card-title" id=plan-trip">Date and time of travel</h4>
-
-                    <div class="row">
-                      <div class="col-lg-6">
-                        <div class="dropdown">
-                          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                            Depart Date
-                          </button>
-                          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <li><a class="dropdown-item" href="#">03/03</a></li>
-                            <li><a class="dropdown-item" href="#">03/04</a></li>
-                          </ul>
-                        </div>
-                      </div>
-
-                      <div class="col-lg-6">
-                        <div class="dropdown">
-                          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                            Hour
-                          </button>
-                          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <li><a class="dropdown-item" href="#">13:00</a></li>
-                            <li><a class="dropdown-item" href="#">20:00</a></li>
-                          </ul>
-                        </div>
-                      </div>  
-
-                    </div>
-              </div>
-          </div>   
-          <div class="card">
-            <div class="card-body">
-                <h4 class="card-title">Bike avaliable at this station</h4>
-                <div id="graph-container"></div>
-            </div>
-          </div>
-      </div>             
- 
+      <div class="container d-flex justify-content-center">
+        <div class="row">
           <div class="col-lg-6">
             <div class="card">
               <div class="card-body">
-                <!-- <h2 class="card-title">Bike station select</h2> -->
-                <div id="bike_station_select">
-                    <label for="station_select">Select a bike station:</label>
-                    <select id="station_select" onchange="display_station_info()" >
-                        <option value ="volvo">Volvo</option>
-                    </select>
+                <h4 class="card-title">Date and time of travel</h4>
+                <div class="row pb-3">
+                  <div class="col-lg-12">
+                    <div class="form-group">
+                      <select
+                        class="btn btn-secondary dropdown-toggle"
+                        id="bike_station_select"
+                        onchange="display_station_info()"
+                      >
+                        <option value="" disabled selected>
+                          Please Select The Station
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-6">
+                    <div class="form-group">
+                      <select
+                        class="btn btn-secondary dropdown-toggle"
+                        id="predict_day"
+                        onchange="predict_hour_dropdown()"
+                      >
+                        <option value="" disabled selected>
+                          Select Depart Date
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-6">
+                    <div class="form-group">
+                      <select
+                        class="btn btn-secondary dropdown-toggle"
+                        id="predict_hour"
+                      >
+                        <option value="" disabled selected>
+                          Select the Hour
+                        </option>
+                      </select>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-          <div class="card">
-            <div class="card-body">
-              <h3 class="card-title">Predicition Chart</h3>
-              <div id="graph-container"></div>
+
+            <div class="card">
+              <div class="card-body">
+                <h4 class="card-title">Bike avaliable at this station</h4>
+                <div id="graph-container3"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-body">
+                <h3 class="card-title">Prediction Chart</h3>
+                <div id="graph_title2">Please choose a station</div>
+                <div id="graph-container2"></div>
+              </div>
             </div>
           </div>
         </div>
-
+      </div>
     </div>
 
 

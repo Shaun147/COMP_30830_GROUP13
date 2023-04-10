@@ -194,5 +194,13 @@ cursor: pointer;
 #graph-container {
 width: 600px;
 height: 280px;
-border: 1px solid black;
+}
+
+#dropdown-bottom1,#dropdown-bottom2{
+  background-color: #ffffff;
+  border-color: #ced4da;
+  color: #005555;
+  font-weight: 400;
+  text-align: left;
+
 }
