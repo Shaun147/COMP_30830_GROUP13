@@ -79,7 +79,7 @@ def update():
         x_train = df_train[df_train['number'] == i][input_features]
         y_train = df_train[df_train['number'] == i][['available_bike_stands', 'available_bikes']]
 
-        rf = RandomForestRegressor(n_estimators=30)
+        rf = RandomForestRegressor(n_estimators=50)
         rf.fit(x_train, y_train)
 
         rf_list[i] = rf
@@ -108,6 +108,8 @@ def update():
     for i in df_whole['number'].unique():
         with open('../machine_learning/station_' + str(i) + '.pkl', 'wb') as handle:
             pickle.dump(rf_list[i], handle, pickle.HIGHEST_PROTOCOL)
+
+    print("pkl have been updated")
 
 
 
