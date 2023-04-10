@@ -133,8 +133,8 @@ function display_graph_week(){
         document.getElementById('graph_title').innerHTML = "Using Condition Statistic By Day<br><br>";
         var week_data = google.visualization.arrayToDataTable([]);
         week_data.addColumn('string', 'day of week');
-        week_data.addColumn('number', 'Bikes');
-        week_data.addColumn('number', 'Stands');
+        week_data.addColumn('number', 'Available Bikes');
+        week_data.addColumn('number', 'Available Stands');
 
         data.forEach(day => {
             const all_places = day.avg_bikes + day.avg_stands;
