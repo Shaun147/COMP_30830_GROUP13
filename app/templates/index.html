@@ -48,7 +48,7 @@
               <a href="#plan-trip">Plan your trip</a>
               <ul class="dropdown">
                 <li><a href="#plan-trip">trip</a></li>
-                <li><a href="#station_select2">predict</a></li>
+                <li><a href="#jump_predict">predict</a></li>
               </ul>
             </li>
 
@@ -130,7 +130,7 @@
               <h3 class="card-title" id="card_title_map">Bike Station Map&emsp;</h3>
             </div>
           </div>
-            <div id="map"></div>
+            <div id="map"><img src="../static/images/map_refresh.png"></div>
         </div>
         <div class="col-lg-4">
           <div class="card">
@@ -336,7 +336,7 @@
             <div class="card">
               <div class="card-body">
                 <div>
-                    <label for="station_select2">Select a bike station:</label>
+                    <label for="station_select2" id="jump_predict">Select a bike station:</label>
                     <select id="station_select2" onchange="prediction_statistic()" >
                         <option value='' disabled selected>-- Please Select The Station --</option>
                     </select>
