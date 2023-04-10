@@ -36,7 +36,7 @@ def run_1h():
 scheduler = sched.scheduler(time.time, time.sleep)
 
 scheduler.enter(0, 1, run_1h)
-scheduler.enter(0, 1, run_1h)
+scheduler.enter(0, 1, run_5m)
 scheduler.run()
 
 
