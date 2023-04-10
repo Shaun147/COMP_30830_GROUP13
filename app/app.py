@@ -12,17 +12,17 @@ NAME = "Dublin"
 STATIONS = "https://api.jcdecaux.com/vls/v1/stations"
 APIKEY = "8baeb25cfb9a5eb1f76dec99338e19bcd20e4386"
 
-USER = "group13"
-PASSWORD = "123456789"
-HOST = "dublinbikegroup13.c1msfserw61n.us-east-1.rds.amazonaws.com"
-PORT = 3306
-DATABASE = "dbbike13"
-
-# HOST = "127.0.0.1"
-# USER = "root"
+# USER = "group13"
+# PASSWORD = "123456789"
+# HOST = "dublinbikegroup13.c1msfserw61n.us-east-1.rds.amazonaws.com"
 # PORT = 3306
 # DATABASE = "dbbike13"
-# PASSWORD = "qweqweqwe"
+
+HOST = "127.0.0.1"
+USER = "root"
+PORT = 3306
+DATABASE = "dbbike13"
+PASSWORD = "qweqweqwe"
 
 engine = create_engine("mysql+pymysql://{}:{}@{}:{}/{}".format(USER, PASSWORD, HOST, PORT, DATABASE), echo=True)
 
@@ -74,10 +74,11 @@ def availability_data(station_id):
 def hourly_data(station_id):
     sql = """
     SELECT avg(available_bike_stands) as avg_stands,
-    avg(available_bikes) as avg_bikes,EXTRACT(HOUR FROM last_update) as hourly
+    avg(available_bikes) as avg_bikes,EXTRACT(HOUR FROM last_update) as hourly,
+    DAYNAME(last_update) as day_name
     FROM dbbike13.availability 
     WHERE number = %d
-    GROUP BY EXTRACT(HOUR FROM last_update)
+    GROUP BY hourly, day_name
     ORDER BY EXTRACT(HOUR FROM last_update)
     """%station_id
     rs = pd.read_sql(sql, engine)
