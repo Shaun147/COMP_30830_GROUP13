@@ -35,6 +35,7 @@ function initMap() {
     google.charts.load('current', {'packages':['corechart']});
     add_marker();
     station_dropdown();
+    predict_day_dropdown();
     // show the current weather and time each second
     setInterval(display_weather, 500);
     forecast();
@@ -89,15 +90,21 @@ function open_infowindow(station, marker){
 
 // create the options to dropdown
 function station_dropdown() {
+    var station_option_output = '';
     fetch("/static_stations").then(response => {
         return response.json()
     }).then(data => {
-        var station_option_output = "<option value='' disabled selected>-- Please Select The Station --</option>";
         data.forEach(station => {
             station_option_output += "<option value=" + station.number + ">" + station.name + "</option><br>";
         })
-        document.getElementById("station_select").innerHTML = station_option_output;
-        document.getElementById("station_select2").innerHTML = station_option_output;
+        document.getElementById("station_select").innerHTML = "<option value='' "
+        + "disabled selected>-- Please Select The Station --</option>" + station_option_output;
+        document.getElementById("station_select2").innerHTML = "<option value='' "
+        + "disabled selected>-- Please Select The Station --</option>" + station_option_output;
+        document.getElementById("station_select3").innerHTML = "<option value='' "
+        + "disabled selected>-- Start Station --</option>" + station_option_output;
+        document.getElementById("station_select4").innerHTML = "<option value='' "
+        + "disabled selected>-- Destination Station --</option>" + station_option_output;
     })
 }
 
@@ -140,7 +147,7 @@ function display_graph_week(){
             width:500,
             height: 250,
             chartArea: {
-                    right: '40%',
+                    right: '20%',
                     top:'10%',
                 },
 
@@ -177,7 +184,7 @@ function display_graph_hourly() {
             width:500,
             height: 250,
             chartArea: {
-                    right: '40%',
+                    right: '20%',
                     top:'10%',
                 },
         };
@@ -199,10 +206,14 @@ function display_station_info(){
         data.forEach(station => {
             if(station.number == value){
                 var table_content = "<tbody>"
-                      + "<tr><th>Name: </th><th class='text_right'>" + station.name + "</th></tr>"
-                      + "<tr><th>Available Stands: </th><th class='text_right'>" + station.available_bike_stands + "</th></tr>"
-                      + "<tr><th>Available Bikes: </th><th class='text_right'>" + station.available_bikes + "</th></tr>"
-                      + "<tr><th>Status: </th><th class='text_right'>" + station.status + "</th></tr>"
+                      + "<tr><th class='text_left'>Name: </th><th class='text_right'>"
+                      + station.name + "</th></tr>"
+                      + "<tr><th class='text_left'>Available Stands: </th><th class='text_right'>"
+                      + station.available_bike_stands + "</th></tr>"
+                      + "<tr><th class='text_left'>Available Bikes: </th><th class='text_right'>"
+                      + station.available_bikes + "</th></tr>"
+                      + "<tr><th class='text_left'>Status: </th><th class='text_right'>"
+                      + station.status + "</th></tr>"
                       +"</tbody>";
                 document.getElementById("station_table").innerHTML = table_content;
                 open_infowindow(station, create_marker(station));
@@ -222,7 +233,7 @@ function now_time(){
     var hour = time.getHours();
     var minutes = time.getMinutes().toString().padStart(2, '0');
     var seconds = time.getSeconds().toString().padStart(2, '0');
-    var rs = "PRESENT TIME: "+day+"/"+month+"/"+ year+" "+hour+":"+minutes+":"+seconds;
+    var rs = "PRESENT TIME: "+day+"/"+month+"/"+ year+"<br>"+hour+":"+minutes+":"+seconds;
     return rs;
 }
 
@@ -303,15 +314,14 @@ function forecast(){
                 }
 
                 if(tempt_value != i_day){
-                    console.log(tempt_value, i_day)
                     var date = new Date((datetime.dt - a_daytime) * 1000);
                     li_content += "<li class='future_weather'>"
                     + "<img class='weather_icon'src='https://openweathermap.org/img/wn/"
                     + main_weather_info(main_weather_icon)
-                    + "@2x.png' alt='Weather icon'><br>"
-                    + main_weather_info(main_weather) + "<br>"
-                    + "MIN-TEMP:"+(temp_min-274)+ "°C" + "<br>MAX-TEMP:" + (temp_max-274)+ "°C" + "<br>DATE:"
-                    + date.getDate() +"/"+ (date.getMonth()+1);
+                    + "@2x.png' alt='Weather icon'><br><b>"
+                    + main_weather_info(main_weather) + "</b><br>"
+                    + "MIN:<b>"+(temp_min-274)+ "</b>°C<br>MAX:<b>" + (temp_max-274)+ "</b>°C" + "<br>DATE:<b>"
+                    + date.getDate() +"/"+ (date.getMonth()+1)+"</b>";
                     + "</li>"
                     tempt_value = tempt_value + 1;
                     temp_max = 0;
@@ -363,7 +373,7 @@ function prediction_statistic() {
         const date_list = [];
 
         data.forEach(each_data => {
-            document.getElementById('graph_title2').innerHTML = "Using Prediction By Every 3-Hour<br><br>";
+            document.getElementById('graph_title2').innerHTML = "Using Prediction By Every 3-Hour";
 
             var input_feature_list = [each_data.feels_like, get_weather_value(each_data.main_weather),
                 each_data.wind_speed, each_data.humidity, each_data.pressure,
@@ -383,14 +393,23 @@ function prediction_statistic() {
                     if(count >= statistic_count){
                         var hour_data = google.visualization.arrayToDataTable([]);
                         hour_data.addColumn('string', 'hourly');
-                        hour_data.addColumn('number', 'predict bikes');
+                        hour_data.addColumn('number', 'predict bikes(day / hour)');
                         for (var i = 0; i < count; i++) {
-                              hour_data.addRow([(date_list[i].getMonth()+1).toString()+'/'+
-                              date_list[i].getDate().toString()+'\n'+
-                              (date_list[i].getHours()).toString()+':00',
+                              hour_data.addRow([date_list[i].getDate().toString()+'/'+
+                              (date_list[i].getHours()).toString()+":00",
                               hourly_predict_bikes[i]]);
                         }
                         var options = {
+                            legend: { position: 'bottom' },
+                            colors: ['#005555', '#f5a074'],
+                             hAxis: {
+                                slantedText: true,
+                                slantedTextAngle: 45,
+                                 textStyle: {
+                                        fontSize: 10
+                                    }
+                            },
+
                         };
 
                         var chart = new google.visualization.ColumnChart(document.getElementById('graph-container2'));
@@ -400,12 +419,9 @@ function prediction_statistic() {
             }
         });
     });
-    predict_day_dropdown();
 }
 
-// create the options to dropdown
 function predict_day_dropdown(){
-    console.log('count');
     var temp_string = "<option value='' disabled selected>-- Please Select The Day First--</option>";
     document.getElementById("predict_hour").innerHTML = temp_string;
 
@@ -423,7 +439,9 @@ function predict_day_dropdown(){
             day_option_output += "<option value=" + (day+i) + ">" +
             (time_new.getMonth()+1)+'/'+time_new.getDate() + "</option><br>";
         }
+
     document.getElementById("predict_day").innerHTML = day_option_output;
+
 }
 
 // create the options to dropdown
@@ -446,13 +464,11 @@ function predict_hour_dropdown(){
 
 // predict the bikes and stands when input station and time
 function prediction_result(){
-    const dropdown_station = document.getElementById('station_select2');
-    const dropdown_day = document.getElementById('predict_day');
-    const dropdown_hour = document.getElementById('predict_hour');
+    var dropdown_station_start = document.getElementById('station_select3').value;
+    var dropdown_station_destination = document.getElementById('station_select4').value;
 
-    var station_value = dropdown_station.value;
-    var day_value = dropdown_day.value;
-    var hour_value = dropdown_hour.value;
+    var day_value = document.getElementById('predict_day').value;
+    var hour_value = document.getElementById('predict_hour').value;
 
     var time = new Date();
     var day = time.getDate();
@@ -471,16 +487,26 @@ function prediction_result(){
             var input_feature_list = [each_data.feels_like, get_weather_value(each_data.main_weather),
                 each_data.wind_speed, each_data.humidity, each_data.pressure,
                 day_of_week, hour_of_day];
-
-            predict(station_value, input_feature_list).then(resultArray => {
-                var table_content = "<tr>"
-                  + "<th>Predict Stands: " + resultArray[0][0].toFixed(0) + '~'
-                  + (resultArray[0][0]+1).toFixed(0) + "</th>"
-                  + "<th>Predict Bikes: " + resultArray[0][1].toFixed(0) + '~'
-                  + (resultArray[0][1]+1).toFixed(0) + "</th>"
-                  +"</tr>";
-                document.getElementById("predict_table").innerHTML = table_content;
-            });
+            if(dropdown_station_start!='' && day_value!='' && hour_value!=''){
+                predict(dropdown_station_start, input_feature_list).then(resultArray => {
+                    var table_content_bikes =resultArray[0][1].toFixed(0) + '~'
+                    + (resultArray[0][1]+1).toFixed(0)
+                    var table_content_stands =resultArray[0][0].toFixed(0) + '~'
+                    + (resultArray[0][0]+1).toFixed(0)
+                    document.getElementById("bike_start").innerHTML = table_content_bikes;
+                    document.getElementById("stand_start").innerHTML = table_content_stands;
+                });
+            }
+            if(dropdown_station_destination!='' && day_value!='' && hour_value!=''){
+                predict(dropdown_station_destination, input_feature_list).then(resultArray => {
+                    var table_content_bikes =resultArray[0][1].toFixed(0) + '~'
+                    + (resultArray[0][1]+1).toFixed(0)
+                    var table_content_stands =resultArray[0][0].toFixed(0) + '~'
+                    + (resultArray[0][0]+1).toFixed(0)
+                    document.getElementById("bike_destination").innerHTML = table_content_bikes;
+                    document.getElementById("stand_destination").innerHTML = table_content_stands;
+                });
+            }
         });
     });
 }
@@ -593,11 +619,11 @@ function search_station(){
                     element.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
                     input_right_flag = 0;
                     document.getElementById('myInput').value = "";
-                    document.getElementById('myInput').placeholder = "Enter Station Name";
+                    document.getElementById('myInput').placeholder = "Station Name";
                 }
             });
             if(input_right_flag == 1){
-                document.getElementById('myInput').placeholder = "Please Enter Right Station Name";
+                document.getElementById('myInput').placeholder = "Wrong Name";
                 document.getElementById('myInput').value = "";
             }
         });
@@ -620,9 +646,6 @@ function debounce_on(){
         debouncedSearch(event.target.value);
     });
 }
-
-
-//*********************************************************test
 
 function scroll_to_map() {
   var element = document.getElementById('card_title_map');

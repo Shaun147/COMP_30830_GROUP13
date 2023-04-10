@@ -41,8 +41,7 @@ body {
 #map-section{
   padding-left: 5px;
   padding-right: 5px;
-  margin-left: 30px;
-
+  margin-left: 0px;
 }
 
 
@@ -168,6 +167,8 @@ cursor: pointer;
     max-width:500px;
     width: 100%;
     height: 270px;
+    position: relative;
+    left: -10%;
 }
 
 .col-lg-8 {
@@ -245,7 +246,7 @@ input[type=submit] {
     font-weight: bold;
     font-family: 'Courier New', Courier, monospace;
     position:relative;
-    left:5%;
+    left:0%;
 }
 
 #left_curr{
@@ -295,6 +296,10 @@ input[type=submit] {
 .text_right{
     text-align:right;
 }
+
+.text_left{
+    text-align:left;
+}
 .card {
     text-align:center;
 }
@@ -303,4 +308,27 @@ input[type=submit] {
     width: 80%;
     position:relative;
     left:10%;
+}
+
+#card_table_predict {
+      max-width: 100%;
+      position: relative;
+      left: auto;
+}
+
+@media only screen and (max-width: 400px) {
+  #card_table_predict{
+      max-width: 75%;
+      position: relative;
+      left: 15vw;
+  }
+}
+
+@media only screen and (min-width: 750px) and (max-width: 990px) {
+  #adjust_title {
+    width: 100%;
+  }
+}
+#station_select2{
+    width:70%;
 }

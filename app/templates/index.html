@@ -47,8 +47,8 @@
             <li class="has-children">
               <a href="#plan-trip">Plan your trip</a>
               <ul class="dropdown">
-                <li><a href="#prediction">Use Bike</a></li>
-                <li><a href="#prediction">Return Bike</a></li>
+                <li><a href="#plan-trip">trip</a></li>
+                <li><a href="#prediction_chart">predict</a></li>
               </ul>
             </li>
 
@@ -100,7 +100,7 @@
               <input
               type="text"
               class="form-control px-4"
-              placeholder="Enter Station Name"
+              placeholder="Station Name"
               id="myInput"
             /></div>
           </form>
@@ -127,7 +127,7 @@
         <div class="col-lg-8" id="row_map">
             <div class="card">
             <div class="card-body">
-              <h2 class="card-title" id="card_title_map">Dublin Bike Station Map&emsp;</h2>
+              <h3 class="card-title" id="card_title_map">Bike Station Map&emsp;</h3>
             </div>
           </div>
             <div id="map"></div>
@@ -138,7 +138,7 @@
 
                   <label for="station_select">Select a bike station:</label>
                   <select id="station_select" onchange="display_station_info()" >
-                      <option value ="volvo">Volvo</option>
+                      <option value='' disabled selected>-- Please Select The Station --</option>
                   </select>
 
             </div>
@@ -265,47 +265,87 @@
                   <h4 class="card-title" id=plan-trip">Date and time of travel</h4>
                   <div class="row">
                       <div class="col-lg-12 dropdown_50">
+                        <div class="form-group" >
+                            <select class="btn btn-secondary dropdown-toggle"
+                                    id="station_select3"
+                                    onchange="prediction_result()" >
+                                <option value='' disabled selected>-- Start Station --</option>
+                            </select>
+                        </div>
+                      </div>
+
+                      <div class="col-lg-12 dropdown_50">
+                        <div class="form-group" >
+                            <select class="btn btn-secondary dropdown-toggle"
+                                    id="station_select4"
+                                    onchange="prediction_result()" >
+                                <option value='' disabled selected>-- Destination Station --</option>
+                            </select>
+                        </div>
+                      </div>
+
+                      <div class="col-lg-12 dropdown_50">
                         <div class="form-group">
                           <select class="btn btn-secondary dropdown-toggle"
                                   id="predict_day"
-                                  onchange="predict_hour_dropdown()">
-                              <option value='' disabled selected>Select The Station First--</option>
+                                  onchange="predict_hour_dropdown();prediction_result()">
+                              <option value='' disabled selected>--Select The Station First--</option>
                           </select>
                         </div>
                       </div>
 
                       <div class="col-lg-12 dropdown_50">
                         <div class="form-group" >
-                          <select class="btn btn-secondary dropdown-toggle" id="predict_hour">
+                          <select class="btn btn-secondary dropdown-toggle"
+                                  id="predict_hour"
+                                  onchange="prediction_result()">
                               <option value='' disabled selected>--Select The Day First--</option>
                           </select>
                         </div>
                       </div>
+
+
+
                     </div>
                   </div>
               </div>
-              <div class="card">
+              <div class="card" id="card_table_predict">
                 <div class="card-body">
-                    <h4 class="card-title">Bike avaliable at this station</h4>
-                    <div id="graph-container3"></div>
+                    <h5 class="card-title">prediction result</h5>
+                    <table class="table table-striped mb-0" id="predict_table">
+                            <tbody>
+                              <tr>
+                                  <th class="text_left">Number of Bikes of Start Station:</th>
+                                  <th class="text_right" id="bike_start">null</th></tr>
+                              <tr>
+                                  <th class="text_left">Number of Stands of Start Station:</th>
+                                  <th class="text_right" id="stand_start">null</th></tr>
+                              <tr>
+                                  <th class="text_left">Number of Bikes of Destination Station:</th>
+                                  <th class="text_right" id="bike_destination">null</th></tr>
+                              <tr>
+                                  <th class="text_left">Number of Stands of Destination Station:</th>
+                                  <th class="text_right" id="stand_destination">null</th></tr>
+                            </tbody>
+                          </table>
                 </div>
               </div>
           </div>
 
-          <div class="col-md-6">
+          <div class="col-md-6" id="adjust_title">
             <div class="card">
               <div class="card-body">
                 <div>
                     <label for="station_select2">Select a bike station:</label>
                     <select id="station_select2" onchange="prediction_statistic()" >
-                        <option value ="volvo">Volvo</option>
+                        <option value='' disabled selected>-- Please Select The Station --</option>
                     </select>
                 </div>
               </div>
             </div>
           <div class="card">
             <div class="card-body">
-              <h3 class="card-title">Prediction Chart</h3>
+              <h3 class="card-title" id="prediction_chart">Prediction Chart</h3>
               <div id="graph_title2">Please choose a station</div>
               <div id="graph-container2"></div>
             </div>
@@ -315,26 +355,6 @@
     </div>
   </div>
 
-  <div class="section">
-    <div class="container">
-      <div class="row" id="prediction">
-        <div class="col-md-6">
-          <div class="card" >
-            <div class="card-body">
-              <div id="graph-container7"></div>
-            </div>
-          </div>
-        </div>
-          <div class="col-md-6">
-            <div class="card">
-              <div class="card-body">
-                <div id="graph-container8"></div>
-              </div>
-            </div>
-          </div>
-      </div>
-    </div>
-  </div>
 
   <div class="site-footer">
     <div class="container">
