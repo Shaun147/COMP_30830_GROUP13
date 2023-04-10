@@ -4,12 +4,11 @@ import sys
 import pickle
 
 from sklearn.preprocessing import LabelEncoder
-from sklearn.linear_model import LinearRegression
+
 from sklearn.metrics import mean_squared_error
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import train_test_split
-from sklearn import metrics
-import json
+
 
 USER = "group13"
 PASSWORD = "123456789"
@@ -79,7 +78,7 @@ def update():
         x_train = df_train[df_train['number'] == i][input_features]
         y_train = df_train[df_train['number'] == i][['available_bike_stands', 'available_bikes']]
 
-        rf = RandomForestRegressor(n_estimators=50)
+        rf = RandomForestRegressor(n_estimators=30)
         rf.fit(x_train, y_train)
 
         rf_list[i] = rf

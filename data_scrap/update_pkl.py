@@ -79,7 +79,7 @@ def update():
         x_train = df_train[df_train['number'] == i][input_features]
         y_train = df_train[df_train['number'] == i][['available_bike_stands', 'available_bikes']]
 
-        rf = RandomForestRegressor(n_estimators=50)
+        rf = RandomForestRegressor(n_estimators=30)
         rf.fit(x_train, y_train)
 
         rf_list[i] = rf
