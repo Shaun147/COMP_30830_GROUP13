@@ -30,12 +30,12 @@ def run_5m():
 def run_1h():
     future_weather_scrap.write_to_db_future_weather(RESOURCE_FUTURE_WEATHER.text)
     update_pkl.update()
-    scheduler.enter(3600, 1, run_1h)
+    scheduler.enter(20, 1, run_1h)
 
 
 scheduler = sched.scheduler(time.time, time.sleep)
 
-# scheduler.enter(0, 1, run_1h)
+scheduler.enter(0, 1, run_1h)
 scheduler.enter(0, 1, run_5m)
 scheduler.run()
 
