@@ -175,7 +175,11 @@ function display_graph_hourly() {
             legend: { position: 'bottom' },
             colors: ['#a9f0f5', '#f5a074', '#8e9096'],
             width:500,
-            height: 250
+            height: 250,
+            chartArea: {
+                    right: '40%',
+                    top:'10%',
+                },
         };
 
         var chart = new google.visualization.LineChart(document.getElementById('graph-container'));
