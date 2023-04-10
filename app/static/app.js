@@ -166,7 +166,11 @@ function display_graph_hourly() {
     fetch("/hourly_data/"+value).then( response => {
         return response.json();
     }).then(data => {
-        document.getElementById('graph_title').innerHTML = "Using Condition Statistic By Hour<br><br>";
+        const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        const date = new Date();
+        const dayOfWeekString = daysOfWeek[date.getDay()];
+        document.getElementById('graph_title').innerHTML = "Using Condition Statistic of "
+                                                            +dayOfWeekString+" By Hour<br><br>";
         var hour_data = google.visualization.arrayToDataTable([]);
         hour_data.addColumn('string', 'time of day');
         hour_data.addColumn('number', 'Available Bikes');
@@ -174,8 +178,11 @@ function display_graph_hourly() {
         hour_data.addColumn('number', 'All');
 
         data.forEach(day => {
-            const all_places = day.avg_bikes + day.avg_stands;
-            hour_data.addRow([day.hourly.toString()+":00", day.avg_bikes, day.avg_stands, all_places]);
+            console.log(dayOfWeekString, day.day_name);
+            if(dayOfWeekString == day.day_name){
+                const all_places = day.avg_bikes + day.avg_stands;
+                hour_data.addRow([day.hourly.toString()+":00", day.avg_bikes, day.avg_stands, all_places]);
+            }
         });
 
         var options = {
