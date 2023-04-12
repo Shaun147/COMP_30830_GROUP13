@@ -475,6 +475,7 @@ function predict_hour_dropdown(){
 // predict the bikes and stands when input station and time
 function prediction_result(){
     var dropdown_station_start = document.getElementById('station_select3').value;
+
     var dropdown_station_destination = document.getElementById('station_select4').value;
 
     var day_value = document.getElementById('predict_day').value;
@@ -499,6 +500,7 @@ function prediction_result(){
                 each_data.wind_speed, each_data.humidity, each_data.pressure,
                 day_of_week, hour_of_day];
             if(dropdown_station_start!='' && day_value!='' && hour_value!=''){
+                console.log(dropdown_station_start);
                 predict(dropdown_station_start, input_feature_list).then(resultArray => {
                     var table_content_bikes =resultArray[0][1].toFixed(0) + '~'
                     + (resultArray[0][1]+2).toFixed(0);
