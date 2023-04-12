@@ -1,6 +1,8 @@
 // set a global info window
 let openInfoWindow = null;
 
+//const loaderContainer = document.querySelector('.loader-container');
+
 // create 3 different icon for stations
 const  lowIcon= {
     path: "M-1.547 12l6.563-6.609-1.406-1.406-5.156 5.203-2.063-2.109-1.406 1.406zM0 0q2.906 0 4.945 2.039t2.039 4.945q0 1.453-0.727 3.328t-1.758 3.516-2.039 3.070-1.711 2.273l-0.75 0.797q-0.281-0.328-0.75-0.867t-1.688-2.156-2.133-3.141-1.664-3.445-0.75-3.375q0-2.906 2.039-4.945t4.945-2.039z",
@@ -367,7 +369,6 @@ function predict(number, list){
 
 // the statistic graph for future 40 hours
 function prediction_statistic() {
-
     const dropdown = document.getElementById('station_select2');
     var value = dropdown.value;
     fetch("/forecast").then(response=>{
@@ -380,6 +381,7 @@ function prediction_statistic() {
         const date_list = [];
 
         data.forEach(each_data => {
+
             document.getElementById('graph_title2').innerHTML = "Using Prediction By Every 3-Hour";
 
             var input_feature_list = [each_data.feels_like, get_weather_value(each_data.main_weather),
@@ -491,15 +493,16 @@ function prediction_result(){
         return response.json();
     }).then(data => {
         data.forEach(each_data => {
+
             var input_feature_list = [each_data.feels_like, get_weather_value(each_data.main_weather),
                 each_data.wind_speed, each_data.humidity, each_data.pressure,
                 day_of_week, hour_of_day];
             if(dropdown_station_start!='' && day_value!='' && hour_value!=''){
                 predict(dropdown_station_start, input_feature_list).then(resultArray => {
                     var table_content_bikes =resultArray[0][1].toFixed(0) + '~'
-                    + (resultArray[0][1]+1).toFixed(0)
+                    + (resultArray[0][1]+2).toFixed(0);
                     var table_content_stands =resultArray[0][0].toFixed(0) + '~'
-                    + (resultArray[0][0]+1).toFixed(0)
+                    + (resultArray[0][0]+2).toFixed(0);
                     document.getElementById("bike_start").innerHTML = table_content_bikes;
                     document.getElementById("stand_start").innerHTML = table_content_stands;
                 });
@@ -507,9 +510,9 @@ function prediction_result(){
             if(dropdown_station_destination!='' && day_value!='' && hour_value!=''){
                 predict(dropdown_station_destination, input_feature_list).then(resultArray => {
                     var table_content_bikes =resultArray[0][1].toFixed(0) + '~'
-                    + (resultArray[0][1]+1).toFixed(0)
+                    + (resultArray[0][1]+2).toFixed(0);
                     var table_content_stands =resultArray[0][0].toFixed(0) + '~'
-                    + (resultArray[0][0]+1).toFixed(0)
+                    + (resultArray[0][0]+2).toFixed(0);
                     document.getElementById("bike_destination").innerHTML = table_content_bikes;
                     document.getElementById("stand_destination").innerHTML = table_content_stands;
                 });
@@ -658,8 +661,13 @@ function scroll_to_map() {
   var element = document.getElementById('card_title_map');
   element.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
 }
-
-
+//function showLoader() {
+//  loaderContainer.style.display = 'block';
+//}
+//
+//function hideLoader() {
+//  loaderContainer.style.display = 'block';
+//}
 //function get_location(){
 //    if(navigator.geolocation) {
 //        navigator.geolocation.getCurrentPosition(show_position, show_error);

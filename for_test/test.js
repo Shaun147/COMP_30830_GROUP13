@@ -1,8 +1,17 @@
-// get references to the button and container
-const button = document.querySelector('#graph-button');
-const container = document.querySelector('#graph-container');
+const loaderContainer = document.querySelector('.loader-container');
 
-// add a click event listener to the button
-button.addEventListener('click', function() {
-    alert('clicked')
-});
+function showLoader() {
+  loaderContainer.style.display = 'block';
+}
+
+function hideLoader() {
+  loaderContainer.style.display = 'none';
+}
+
+function runFunction() {
+  showLoader();
+  setTimeout(() => {
+    hideLoader();
+    alert('Function finished running!');
+  }, 3000);
+}

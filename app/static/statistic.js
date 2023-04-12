@@ -90,3 +90,4 @@ function click_button()
             draw_graph(averageAllStationByDayOfWeek);
         });
     });
+
