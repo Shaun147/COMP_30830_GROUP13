@@ -4,17 +4,31 @@ import sys
 import pickle
 
 from sklearn.preprocessing import LabelEncoder
-
+from sklearn import metrics
 from sklearn.metrics import mean_squared_error
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import train_test_split
 
 
-USER = "group13"
-PASSWORD = "123456789"
-HOST = "dublinbikegroup13.c1msfserw61n.us-east-1.rds.amazonaws.com"
+# USER = "group13"
+# PASSWORD = "123456789"
+# HOST = "dublinbikegroup13.c1msfserw61n.us-east-1.rds.amazonaws.com"
+# PORT = 3306
+# DATABASE = "dbbike13"
+
+HOST = "127.0.0.1"
+USER = "root"
 PORT = 3306
 DATABASE = "dbbike13"
+PASSWORD = "qweqweqwe"
+def printMetrics(testActualVal, predictions):
+    #classification evaluation measures
+
+    print("MAE: ", metrics.mean_absolute_error(testActualVal, predictions))
+    #print("MSE: ", metrics.mean_squared_error(testActualVal, predictions))
+    print("RMSE: ", metrics.mean_squared_error(testActualVal, predictions)**0.5)
+    print("R2: ", metrics.r2_score(testActualVal, predictions))
+    print('\n==============================================================================')
 def update():
     try:
         engine = create_engine("mysql+pymysql://{}:{}@{}:{}/{}".format(USER, PASSWORD, HOST, PORT, DATABASE), echo=True)
@@ -78,7 +92,7 @@ def update():
         x_train = df_train[df_train['number'] == i][input_features]
         y_train = df_train[df_train['number'] == i][['available_bike_stands', 'available_bikes']]
 
-        rf = RandomForestRegressor(n_estimators=30)
+        rf = RandomForestRegressor(n_estimators=10)
         rf.fit(x_train, y_train)
 
         rf_list[i] = rf
@@ -100,7 +114,16 @@ def update():
         #     print(y_pred.head(5))
         mse_sum += mse
 
+        score = rf_list[i].score(x_test, y_test)
+
+        feature_importances = pd.DataFrame(rf_list[i].feature_importances_,
+                                           index=input_features,
+                                           columns=['importance']).sort_values('importance', ascending=False)
+        print(feature_importances)
+
         print('Mean squared error:', mse)
+        print('score:', score)
+        printMetrics(y_test, y_pred)
         if mse > 3:
             new_train_list += [i, ]
 
@@ -108,7 +131,9 @@ def update():
         with open('station_' + str(i) + '.pkl', 'wb') as handle:
             pickle.dump(rf_list[i], handle, pickle.HIGHEST_PROTOCOL)
 
+
     print(mse_sum / len(df_whole['number'].unique()))
+
 
 update()
 

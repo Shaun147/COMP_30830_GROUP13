@@ -11,11 +11,18 @@ from sklearn.model_selection import train_test_split
 from sklearn import metrics
 import json
 
-USER = "group13"
-PASSWORD = "123456789"
-HOST = "dublinbikegroup13.c1msfserw61n.us-east-1.rds.amazonaws.com"
+# USER = "group13"
+# PASSWORD = "123456789"
+# HOST = "dublinbikegroup13.c1msfserw61n.us-east-1.rds.amazonaws.com"
+# PORT = 3306
+# DATABASE = "dbbike13"
+
+HOST = "127.0.0.1"
+USER = "root"
 PORT = 3306
 DATABASE = "dbbike13"
+PASSWORD = "qweqweqwe"
+
 def update():
     try:
         engine = create_engine("mysql+pymysql://{}:{}@{}:{}/{}".format(USER, PASSWORD, HOST, PORT, DATABASE), echo=True)
@@ -79,7 +86,10 @@ def update():
         x_train = df_train[df_train['number'] == i][input_features]
         y_train = df_train[df_train['number'] == i][['available_bike_stands', 'available_bikes']]
 
-        rf = RandomForestRegressor(n_estimators=50)
+        rf = RandomForestRegressor(n_estimators=30
+                                  ,random_state=0
+                                  ,max_depth=27
+                                  ,max_features=6)
         rf.fit(x_train, y_train)
 
         rf_list[i] = rf
@@ -105,6 +115,7 @@ def update():
         if mse > 3:
             new_train_list += [i, ]
 
+    print(mse_sum / len(df_whole['number'].unique()))
     for i in df_whole['number'].unique():
         with open('../machine_learning/station_' + str(i) + '.pkl', 'wb') as handle:
             pickle.dump(rf_list[i], handle, pickle.HIGHEST_PROTOCOL)
