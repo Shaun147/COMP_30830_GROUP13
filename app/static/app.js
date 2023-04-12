@@ -206,6 +206,7 @@ function display_graph_hourly() {
 // use to show the available information
 // when showing available information, statistic graph showing
 function display_station_info(){
+    document.getElementById('text_after').textContent = '';
     const dropdown = document.getElementById('station_select');
     var value = dropdown.value;
 
@@ -661,6 +662,22 @@ function scroll_to_map() {
   var element = document.getElementById('card_title_map');
   element.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
 }
+
+function predict_under_map(){
+    var select_value = document.getElementById('station_select').value;
+
+    if (select_value != ''){
+        document.getElementById('text_after').textContent = '';
+        document.getElementById('station_select2').value = select_value;
+        prediction_statistic();
+        var element = document.getElementById('jump_predict');
+        element.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"})
+    } else{
+        document.getElementById('text_after').textContent = 'Please select a station';
+    }
+}
+
+
 //function showLoader() {
 //  loaderContainer.style.display = 'block';
 //}

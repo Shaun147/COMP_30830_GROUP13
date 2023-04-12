@@ -389,3 +389,14 @@ select {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+#predict_by_map:active {
+  background-color: #005555;
+  color: white;
+}
+
+
+#predict_by_map, #text_after{
+   position:relative;
+   top:-18px;
+}
