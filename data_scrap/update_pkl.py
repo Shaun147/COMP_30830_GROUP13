@@ -11,17 +11,17 @@ from sklearn.model_selection import train_test_split
 from sklearn import metrics
 import json
 
-# USER = "group13"
-# PASSWORD = "123456789"
-# HOST = "dublinbikegroup13.c1msfserw61n.us-east-1.rds.amazonaws.com"
-# PORT = 3306
-# DATABASE = "dbbike13"
-
-HOST = "127.0.0.1"
-USER = "root"
+USER = "group13"
+PASSWORD = "123456789"
+HOST = "dublinbikegroup13.c1msfserw61n.us-east-1.rds.amazonaws.com"
 PORT = 3306
 DATABASE = "dbbike13"
-PASSWORD = "qweqweqwe"
+
+# HOST = "127.0.0.1"
+# USER = "root"
+# PORT = 3306
+# DATABASE = "dbbike13"
+# PASSWORD = "qweqweqwe"
 
 def update():
     try:
