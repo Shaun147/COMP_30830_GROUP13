@@ -676,30 +676,3 @@ function predict_under_map(){
         document.getElementById('text_after').textContent = 'Please select a station';
     }
 }
-
-
-//function showLoader() {
-//  loaderContainer.style.display = 'block';
-//}
-//
-//function hideLoader() {
-//  loaderContainer.style.display = 'block';
-//}
-//function get_location(){
-//    if(navigator.geolocation) {
-//        navigator.geolocation.getCurrentPosition(show_position, show_error);
-//    } else {
-//        console.log("Geolocation is not supported by this browser.");
-//    }
-//}
-//
-//function show_position(position) {
-//    const userLat = position.coords.latitude;
-//    const userLng = position.coords.longitude;
-//    console.log("Latitude: " + userLat + ", Longitude: " + userLng);
-//}
-//
-//function show_error(error) {
-//    console.log("Error code: " + error.code + ", Message: " + error.message);
-//}
-
