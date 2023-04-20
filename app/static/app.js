@@ -38,7 +38,7 @@ function initMap() {
     add_marker();
     station_dropdown();
     predict_day_dropdown();
-    // show the current weather and time each second
+    // show the current weather and time each half second
     setInterval(display_weather, 500);
     forecast();
     autocomplete_search();
@@ -64,7 +64,6 @@ function create_marker(station) {
         title: station.address,
         icon: station.available_bikes <= 5 ? lowIcon :
         station.available_bikes <= 15 ? mediumIcon : highIcon
-
     });
 
     marker.addListener("click", () => {
@@ -382,9 +381,7 @@ function prediction_statistic() {
         const date_list = [];
 
         data.forEach(each_data => {
-
             document.getElementById('graph_title2').innerHTML = "Using Prediction By Every 3-Hour";
-
             var input_feature_list = [each_data.feels_like, get_weather_value(each_data.main_weather),
                 each_data.wind_speed, each_data.humidity, each_data.pressure,
                 each_data.day_of_week, each_data.hourly];
@@ -475,18 +472,13 @@ function predict_hour_dropdown(){
 // predict the bikes and stands when input station and time
 function prediction_result(){
     var dropdown_station_start = document.getElementById('station_select3').value;
-
     var dropdown_station_destination = document.getElementById('station_select4').value;
-
     var day_value = document.getElementById('predict_day').value;
     var hour_value = document.getElementById('predict_hour').value;
-
     var time = new Date();
     var day = time.getDate();
     var hour = time.getHours();
-
     var predict_timestamp = Math.floor(time.getTime()/1000) + ((day_value-day)*24 + (hour_value-hour))*3600;
-
     var time_new = new Date(predict_timestamp * 1000);
     var day_of_week = time_new.getDay();
     var hour_of_day = time_new.getHours();
@@ -495,7 +487,6 @@ function prediction_result(){
         return response.json();
     }).then(data => {
         data.forEach(each_data => {
-
             var input_feature_list = [each_data.feels_like, get_weather_value(each_data.main_weather),
                 each_data.wind_speed, each_data.humidity, each_data.pressure,
                 day_of_week, hour_of_day];
@@ -524,7 +515,7 @@ function prediction_result(){
     });
 }
 
-
+//refer to
 function autocomplete_search(){
     var list_data = [];
 

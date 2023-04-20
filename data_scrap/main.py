@@ -32,7 +32,7 @@ def run_5m():
 def run_1h():
     RESOURCE_FUTURE_WEATHER = requests.get(future_weather_URL, params=parameters)
     future_weather_scrap.write_to_db_future_weather(RESOURCE_FUTURE_WEATHER.text)
-    update_pkl.update()
+    # update_pkl.update()
     scheduler.enter(3600, 1, run_1h)
 
 
