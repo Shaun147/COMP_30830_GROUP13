@@ -40,8 +40,6 @@ def initialise_table():
     except Exception as e:
         print(e)
 
-
-
 # initialise_table()
 def get_stations(text):
     station_list=[]

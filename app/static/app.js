@@ -43,6 +43,7 @@ function initMap() {
     forecast();
     autocomplete_search();
     debounce_on();
+    loader();
 }
 
 // add markers to each station and call the info window of station
@@ -56,7 +57,6 @@ function add_marker() {
         });
     });
 }
-
 function create_marker(station) {
     var marker = new google.maps.Marker({
         position: { lat: station.position_lat, lng: station.position_lng },
@@ -179,7 +179,6 @@ function display_graph_hourly() {
         hour_data.addColumn('number', 'All');
 
         data.forEach(day => {
-            console.log(dayOfWeekString, day.day_name);
             if(dayOfWeekString == day.day_name){
                 const all_places = day.avg_bikes + day.avg_stands;
                 hour_data.addRow([day.hourly.toString()+":00", day.avg_bikes, day.avg_stands, all_places]);
@@ -369,6 +368,7 @@ function predict(number, list){
 
 // the statistic graph for future 40 hours
 function prediction_statistic() {
+    showLoader();
     const dropdown = document.getElementById('station_select2');
     var value = dropdown.value;
     fetch("/forecast").then(response=>{
@@ -421,6 +421,7 @@ function prediction_statistic() {
 
                         var chart = new google.visualization.ColumnChart(document.getElementById('graph-container2'));
                         chart.draw(hour_data, options);
+                        hideLoader();
                     }
                 });
             }
@@ -491,7 +492,6 @@ function prediction_result(){
                 each_data.wind_speed, each_data.humidity, each_data.pressure,
                 day_of_week, hour_of_day];
             if(dropdown_station_start!='' && day_value!='' && hour_value!=''){
-                console.log(dropdown_station_start);
                 predict(dropdown_station_start, input_feature_list).then(resultArray => {
                     var table_content_bikes =resultArray[0][1].toFixed(0) + '~'
                     + (resultArray[0][1]+2).toFixed(0);
@@ -515,7 +515,7 @@ function prediction_result(){
     });
 }
 
-//refer to
+//refer to https://www.runoob.com/
 function autocomplete_search(){
     var list_data = [];
 
@@ -668,4 +668,20 @@ function predict_under_map(){
     } else{
         document.getElementById('text_after').textContent = 'Please select a station';
     }
+}
+
+function loader(){
+    window.addEventListener("load", function() {
+      hideLoader();
+    });
+}
+
+function showLoader() {
+  var loaderContainer = document.querySelector(".loader-container");
+  loaderContainer.style.display = "block";
+}
+
+function hideLoader() {
+  var loaderContainer = document.querySelector(".loader-container");
+  loaderContainer.style.display = "none";
 }

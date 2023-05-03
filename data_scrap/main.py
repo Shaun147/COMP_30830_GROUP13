@@ -27,7 +27,6 @@ def run_5m():
     bike_scrap.write_to_db_availability(RESOURCE.text)
     scheduler.enter(300, 1, run_5m)
 
-
 def run_1h():
     RESOURCE_FUTURE_WEATHER = requests.get(future_weather_URL, params=parameters)
     future_weather_scrap.write_to_db_future_weather(RESOURCE_FUTURE_WEATHER.text)
